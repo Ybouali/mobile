@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    final logger = Logger();
     return Scaffold(
       body: Center(
         child: Column(
@@ -24,7 +26,7 @@ class HomeScreen extends StatelessWidget {
             const SizedBox(height: 20),
             ElevatedButton(
               onPressed: () {
-                print("Button pressed");
+                logger.i("Button pressed");
               },
               child: Text("Click me"),
             ),
