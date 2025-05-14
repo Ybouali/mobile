@@ -1,6 +1,8 @@
 // import 'package:ex02/pages/widgets/grid_widget.dart';
-import 'package:ex02/pages/widgets/custume_button.dart';
+import 'package:ex02/pages/widgets/custome_button.dart';
+import 'package:ex02/pages/widgets/custome_test_field.dart';
 import 'package:flutter/material.dart';
+import 'package:logger/logger.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -30,10 +32,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final logger = Logger();
+
     return Scaffold(
       backgroundColor: Colors.cyanAccent,
       appBar: AppBar(
-        backgroundColor: Colors.blue.shade500,
+        backgroundColor: Colors.cyan.shade400,
         title: Center(
           child: Text(
             "Calculator",
@@ -51,25 +55,43 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 10),
                       // Text Field for the input
-                      TextField(),
+                      CustomeTestField(label: "0"),
 
                       const SizedBox(height: 10),
                       // Text Field for the output
-                      Text("0"),
+                      CustomeTestField(label: "label"),
                     ],
                   ),
 
+                  const SizedBox(height: 10),
+
                   // Grid for the buttons
-                  GridView.count(
-                    shrinkWrap: true,
-                    physics: NeverScrollableScrollPhysics(),
-                    crossAxisCount: orientation == Orientation.portrait ? 5 : 8,
-                    childAspectRatio:
-                        orientation == Orientation.portrait ? 1 : 1.5,
-                    children:
-                        keys.map((val) {
-                          return CustumeButton(name: val, onTap: () {});
-                        }).toList(),
+                  Flexible(
+                    child: SizedBox(
+                      height: orientation == Orientation.portrait ? 350 : 200,
+                      child: Scrollbar(
+                        child: GridView.count(
+                          shrinkWrap: true,
+                          physics:
+                              orientation == Orientation.portrait
+                                  ? NeverScrollableScrollPhysics()
+                                  : BouncingScrollPhysics(),
+                          crossAxisCount:
+                              orientation == Orientation.portrait ? 5 : 5,
+                          childAspectRatio:
+                              orientation == Orientation.portrait ? 1 : 1.5,
+                          children:
+                              keys.map((val) {
+                                return CustomeButton(
+                                  name: val,
+                                  onTap: () {
+                                    logger.i("button presed :$val");
+                                  },
+                                );
+                              }).toList(),
+                        ),
+                      ),
+                    ),
                   ),
                 ],
               ),

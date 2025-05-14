@@ -1,4 +1,4 @@
-import 'package:ex02/pages/widgets/custume_button.dart';
+import 'package:ex02/pages/widgets/custome_button.dart';
 import 'package:flutter/material.dart';
 
 class GridWidget extends StatelessWidget {
@@ -38,7 +38,7 @@ class GridWidget extends StatelessWidget {
         childAspectRatio: 1.0,
       ),
       itemBuilder: (context, index) {
-        return CustumeButton(name: keys[index], onTap: () {});
+        return CustomeButton(name: keys[index], onTap: () {});
       },
     );
   }
