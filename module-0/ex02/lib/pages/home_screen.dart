@@ -32,6 +32,12 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final TextEditingController inputController = TextEditingController(
+      text: '0',
+    );
+    final TextEditingController resultController = TextEditingController(
+      text: '0',
+    );
     final logger = Logger();
 
     return Scaffold(
@@ -55,11 +61,11 @@ class HomeScreen extends StatelessWidget {
                     children: [
                       const SizedBox(height: 10),
                       // Text Field for the input
-                      CustomeTestField(label: "0"),
+                      CustomeTestField(controller: inputController),
 
                       const SizedBox(height: 10),
                       // Text Field for the output
-                      CustomeTestField(label: "label"),
+                      CustomeTestField(controller: resultController),
                     ],
                   ),
 
