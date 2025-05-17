@@ -1,54 +1,58 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
+import 'package:weather_app/features/controller/wheather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  const CustomAppBar({super.key});
+  final VoidCallback onSearch;
+  final VoidCallback onGeo;
+  const CustomAppBar({super.key, required this.onSearch, required this.onGeo});
 
   @override
   Widget build(BuildContext context) {
-    return Padding(
-      padding: EdgeInsets.all(8),
-      child: AppBar(
-        title: Container(
-          height: 40,
-          decoration: BoxDecoration(
-            color: Colors.amberAccent,
-            borderRadius: BorderRadius.circular(8),
-          ),
-          child: Row(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              IconButton(
-                onPressed: () {},
-                icon: Icon(Icons.search),
-                padding: const EdgeInsets.all(0),
-                constraints: const BoxConstraints(),
-                splashRadius: 20,
-              ),
-              Expanded(
-                child: TextField(
-                  decoration: InputDecoration(
-                    hintText: "Search location ...",
-                    border: InputBorder.none,
-                    contentPadding: const EdgeInsets.symmetric(
-                      horizontal: 10,
-                      vertical: 10,
-                    ),
+    final wheatherController = Get.put(WheatherController());
+    return AppBar(
+      backgroundColor: Color(0xFF5B5E73),
+      title: Container(
+        height: 40,
+        decoration: BoxDecoration(
+          color: Color(0xFF5B5E73),
+          border: Border(right: BorderSide(color: Colors.white, width: 2)),
+        ),
+        child: Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            IconButton(
+              onPressed: onSearch,
+              icon: Icon(Icons.search, color: Colors.grey),
+              constraints: const BoxConstraints(),
+              splashRadius: 20,
+            ),
+            Expanded(
+              child: TextField(
+                controller: wheatherController.textFieldController,
+                decoration: InputDecoration(
+                  hintStyle: TextStyle(color: Colors.grey),
+                  hintText: "Search location ...",
+                  border: InputBorder.none,
+                  contentPadding: const EdgeInsets.symmetric(
+                    horizontal: 10,
+                    vertical: 10,
                   ),
                 ),
               ),
-            ],
+            ),
+          ],
+        ),
+      ),
+      actions: [
+        Transform.rotate(
+          angle: -0.785398,
+          child: IconButton(
+            onPressed: onGeo,
+            icon: Icon(Icons.send, size: 25, color: Colors.white),
           ),
         ),
-        actions: [
-          Transform.rotate(
-            angle: -0.785398,
-            child: IconButton(
-              onPressed: () {},
-              icon: Icon(Icons.send, size: 25),
-            ),
-          ),
-        ],
-      ),
+      ],
     );
   }
 

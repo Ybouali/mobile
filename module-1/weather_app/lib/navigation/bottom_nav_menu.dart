@@ -1,26 +1,22 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/features/components/custom_app_bar.dart';
-import 'package:weather_app/features/screens/currently_screen.dart';
-import 'package:weather_app/features/screens/today_screen.dart';
-import 'package:weather_app/features/screens/weekly_screen.dart';
+import 'package:weather_app/features/controller/wheather_controller.dart';
 
 class BottomNavMenu extends StatelessWidget {
   const BottomNavMenu({super.key});
 
   @override
   Widget build(BuildContext context) {
-    final controller = Get.put(NavigationController());
+    final wheatherController = Get.put(WheatherController());
 
     return Scaffold(
-      appBar: CustomAppBar(),
       bottomNavigationBar: Obx(
         () => NavigationBar(
           height: 80,
           elevation: 0,
-          selectedIndex: controller.selectedIndex.value,
+          selectedIndex: wheatherController.selectedIndex.value,
           onDestinationSelected:
-              (value) => controller.selectedIndex.value = value,
+              (value) => wheatherController.selectedIndex.value = value,
           destinations: [
             NavigationDestination(
               icon: Icon(Icons.settings),
@@ -37,17 +33,9 @@ class BottomNavMenu extends StatelessWidget {
           ],
         ),
       ),
-      body: Obx(() => controller.screen[controller.selectedIndex.value]),
+      body: Obx(
+        () => wheatherController.screen[wheatherController.selectedIndex.value],
+      ),
     );
   }
-}
-
-class NavigationController extends GetxController {
-  final RxInt selectedIndex = 0.obs;
-
-  final List<Widget> screen = [
-    CurrentlyScreen(text: "Current"),
-    TodayScreen(text: "Today"),
-    WeeklyScreen(text: "Weekly"),
-  ];
 }
