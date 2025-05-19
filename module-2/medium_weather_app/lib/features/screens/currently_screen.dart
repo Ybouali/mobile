@@ -10,17 +10,21 @@ class CurrentlyScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wheatherController = Get.put(WeatherController());
-    final String city = wheatherController.textFieldController.text;
 
     return Scaffold(
       appBar: CustomAppBar(
         onSearch: () => wheatherController.onSearch(),
-        onGeo: () {},
+        onGeo: () => wheatherController.getCurrentLoacation(),
       ),
       body: Center(
-        child: Text(
-          '$text\n$city',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: Obx(
+          () => Padding(
+            padding: const EdgeInsets.all(8.0),
+            child: Text(
+              '$text\n${wheatherController.searchedText.value}',
+              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+            ),
+          ),
         ),
       ),
     );

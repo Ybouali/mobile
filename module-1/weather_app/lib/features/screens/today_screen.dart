@@ -10,7 +10,6 @@ class TodayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final wheatherController = Get.put(WeatherController());
-    final String city = wheatherController.textFieldController.text;
 
     return Scaffold(
       appBar: CustomAppBar(
@@ -18,9 +17,11 @@ class TodayScreen extends StatelessWidget {
         onGeo: () {},
       ),
       body: Center(
-        child: Text(
-          '$text\n$city',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: Obx(
+          () => Text(
+            '$text\n${wheatherController.searchedText.value}',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ),
       ),
     );

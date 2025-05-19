@@ -14,7 +14,10 @@ class BottomNavMenu extends StatelessWidget {
         () => NavigationBar(
           height: 80,
           elevation: 0,
-          selectedIndex: wheatherController.selectedIndex.value,
+          selectedIndex:
+              wheatherController.selectedIndex.value > 2
+                  ? 0
+                  : wheatherController.selectedIndex.value,
           onDestinationSelected:
               (value) => wheatherController.selectedIndex.value = value,
           destinations: [

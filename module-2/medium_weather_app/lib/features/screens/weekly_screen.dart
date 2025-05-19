@@ -9,19 +9,19 @@ class WeeklyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wheatherController = Get.put(WeatherController());
-
-    final String city = wheatherController.textFieldController.text;
+    final weatherController = Get.put(WeatherController());
 
     return Scaffold(
       appBar: CustomAppBar(
-        onSearch: () => wheatherController.onSearch(),
-        onGeo: () {},
+        onSearch: () => weatherController.onSearch(),
+        onGeo: () => weatherController.getCurrentLoacation(),
       ),
       body: Center(
-        child: Text(
-          '$text\n$city',
-          style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+        child: Obx(
+          () => Text(
+            '$text\n${weatherController.searchedText.value}',
+            style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
+          ),
         ),
       ),
     );

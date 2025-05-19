@@ -3,9 +3,8 @@ import 'package:get/get.dart';
 import 'package:medium_weather_app/features/components/custom_app_bar.dart';
 import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
-class TodayScreen extends StatelessWidget {
-  final String text;
-  const TodayScreen({super.key, required this.text});
+class GeolocatorDeniedPermissionScreen extends StatelessWidget {
+  const GeolocatorDeniedPermissionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -13,17 +12,15 @@ class TodayScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        onSearch: () => weatherController.onSearch(),
+        onSearch: () {},
         onGeo: () => weatherController.getCurrentLoacation(),
       ),
       body: Center(
-        child: Obx(
-          () => Padding(
-            padding: const EdgeInsets.all(8),
-            child: Text(
-              '$text\n${weatherController.searchedText.value}',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
-            ),
+        child: Padding(
+          padding: const EdgeInsets.all(8),
+          child: Text(
+            "Geolocation is not available, please enable it in your app settings !",
+            style: TextStyle(color: Colors.red),
           ),
         ),
       ),
