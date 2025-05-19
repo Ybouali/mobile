@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
-import 'package:medium_weather_app/features/controller/weather_controller.dart';
+// import 'package:get/get.dart';
+import 'package:medium_weather_app/features/components/city_search_field.dart';
+// import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearch;
@@ -9,7 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wheatherController = Get.put(WeatherController());
+    // final wheatherController = Get.put(WeatherController());
     return AppBar(
       backgroundColor: Color(0xFF5B5E73),
       title: Container(
@@ -28,18 +29,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               splashRadius: 20,
             ),
             Expanded(
-              child: TextField(
-                controller: wheatherController.textFieldController,
-                decoration: InputDecoration(
-                  hintStyle: TextStyle(color: Colors.grey),
-                  hintText: "Search location ...",
-                  border: InputBorder.none,
-                  contentPadding: const EdgeInsets.symmetric(
-                    horizontal: 10,
-                    vertical: 10,
-                  ),
-                ),
-              ),
+              child: CitySearchField(),
+              // child: TextField(
+              //   controller: wheatherController.textFieldController,
+              //   decoration: InputDecoration(
+              //     hintStyle: TextStyle(color: Colors.grey),
+              //     hintText: "Search location ...",
+              //     border: InputBorder.none,
+              //     contentPadding: const EdgeInsets.symmetric(
+              //       horizontal: 10,
+              //       vertical: 10,
+              //     ),
+              //   ),
+              // ),
             ),
           ],
         ),

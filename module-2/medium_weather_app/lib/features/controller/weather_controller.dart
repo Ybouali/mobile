@@ -1,7 +1,11 @@
+import 'dart:convert';
+
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
+import 'package:http/http.dart' as http;
 import 'package:medium_weather_app/features/screens/currently_screen.dart';
 import 'package:medium_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:medium_weather_app/features/screens/today_screen.dart';
@@ -38,6 +42,7 @@ class WeatherController extends GetxController {
   void onSearch() {
     searchedText.value = textFieldController.text;
     textFieldController.clear();
+    _getLanAndLongFromName();
   }
 
   Future<void> getCurrentLoacation() async {
@@ -85,12 +90,55 @@ class WeatherController extends GetxController {
       }
 
       Position position = await Geolocator.getCurrentPosition();
-      location.value =
-          'Lat: ${position.latitude} and Log: ${position.longitude}';
-      searchedText.value = location.value;
+      _getNameFromPosition(position.latitude, position.longitude);
     } catch (e) {
       selectedIndex.value = 3;
       Get.offAll(() => BottomNavMenu());
+    }
+  }
+
+  void _getNameFromPosition(double lat, double long) async {
+    List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
+    Placemark place = placemarks[0];
+    location.value =
+        '${place.locality}, ${place.administrativeArea}, ${place.country}';
+    searchedText.value = location.value;
+    textFieldController.text = location.value;
+  }
+
+  void _getLanAndLongFromName() async {
+    List<Location> locations = await locationFromAddress(searchedText.value);
+    Location loc = locations.first;
+    _getNameFromPosition(loc.latitude, loc.longitude);
+  }
+
+  Future<List<String>> fetchCitySuggestions() async {
+    const apiKey = "AIzaSyDG35htYa1vR1C32X2hzlV7nn5IPMGNUoI";
+
+    final String baseUrl =
+        'https://places.googleapis.com/v1/places:autocomplete';
+
+    final response = await http.post(
+      Uri.parse(baseUrl),
+      headers: {
+        'Content-Type': 'application/json',
+        'X-Goog-Api-Key': apiKey,
+        'X-Goog-FieldMask': 'places.displayName',
+      },
+      body: jsonEncode({
+        "input": textFieldController.text,
+        "languageCode": "en",
+      }),
+    );
+    print(response.statusCode);
+
+    if (response.statusCode == 200) {
+      final data = jsonDecode(response.body);
+      print(data);
+      final predictions = data['predictions'] as List;
+      return predictions.map((p) => p['description'] as String).toList();
+    } else {
+      throw Exception("Failed to fetch suggestions");
     }
   }
 }
