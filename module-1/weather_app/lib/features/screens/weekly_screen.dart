@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:weather_app/features/components/custom_app_bar.dart';
-import 'package:weather_app/features/controller/wheather_controller.dart';
+import 'package:weather_app/features/controller/weather_controller.dart';
 
 class WeeklyScreen extends StatelessWidget {
   final String text;
@@ -9,7 +9,7 @@ class WeeklyScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wheatherController = Get.put(WheatherController());
+    final wheatherController = Get.put(WeatherController());
 
     final String city = wheatherController.textFieldController.text;
 

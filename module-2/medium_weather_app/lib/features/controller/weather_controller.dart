@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:weather_app/features/screens/currently_screen.dart';
-import 'package:weather_app/features/screens/today_screen.dart';
-import 'package:weather_app/features/screens/weekly_screen.dart';
-import 'package:weather_app/navigation/bottom_nav_menu.dart';
+import 'package:medium_weather_app/features/screens/currently_screen.dart';
+import 'package:medium_weather_app/features/screens/today_screen.dart';
+import 'package:medium_weather_app/features/screens/weekly_screen.dart';
+import 'package:medium_weather_app/navigation/bottom_nav_menu.dart';
 
-class WheatherController extends GetxController {
-  static WheatherController get instance => Get.find();
+class WeatherController extends GetxController {
+  static WeatherController get instance => Get.find();
 
   // Variables
   final TextEditingController textFieldController = TextEditingController();
