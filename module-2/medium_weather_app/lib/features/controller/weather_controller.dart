@@ -22,6 +22,7 @@ class WeatherController extends GetxController {
   late List<Widget> screen;
   final RxString location = ''.obs;
   final RxInt numberTimeCallReq = 0.obs;
+  final RxBool showSearchButton = true.obs;
 
   @override
   void onInit() {
@@ -113,30 +114,27 @@ class WeatherController extends GetxController {
   }
 
   Future<List<String>> fetchCitySuggestions() async {
-    const apiKey = "AIzaSyDG35htYa1vR1C32X2hzlV7nn5IPMGNUoI";
+    if (textFieldController.text.isEmpty) {
+      return [];
+    }
 
-    final String baseUrl =
-        'https://places.googleapis.com/v1/places:autocomplete';
+    const apiKey = "AIzaSyAYsnYxl_dKJDDM9N_wT6jQFG_x5rRcyiw";
 
-    final response = await http.post(
-      Uri.parse(baseUrl),
-      headers: {
-        'Content-Type': 'application/json',
-        'X-Goog-Api-Key': apiKey,
-        'X-Goog-FieldMask': 'places.displayName',
-      },
-      body: jsonEncode({
-        "input": textFieldController.text,
-        "languageCode": "en",
-      }),
+    const String baseUrl =
+        'https://maps.googleapis.com/maps/api/place/autocomplete/json';
+
+    final response = await http.get(
+      Uri.parse(
+        '$baseUrl?input=${textFieldController.text}&types=(cities)&key=$apiKey',
+      ),
     );
-    print(response.statusCode);
 
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
-      print(data);
       final predictions = data['predictions'] as List;
-      return predictions.map((p) => p['description'] as String).toList();
+      return predictions.map((p) {
+        return p['description'] as String;
+      }).toList();
     } else {
       throw Exception("Failed to fetch suggestions");
     }

@@ -9,10 +9,12 @@ class CitySearchField extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weatherController = Get.put(WeatherController());
+
     return TypeAheadField<String>(
       controller: weatherController.textFieldController,
       suggestionsCallback: (String search) async {
         weatherController.textFieldController.text = search;
+        weatherController.showSearchButton.value = false;
         return await weatherController.fetchCitySuggestions();
       },
       builder: (context, controller, focusNode) {
@@ -20,17 +22,25 @@ class CitySearchField extends StatelessWidget {
           controller: controller,
           focusNode: focusNode,
           decoration: InputDecoration(
-            labelText: 'Search City',
-            border: OutlineInputBorder(),
+            hintText: 'Search City',
+            border: InputBorder.none,
           ),
         );
       },
       itemBuilder: (context, String suggestion) {
-        return ListTile(title: Text(suggestion));
+        return Container(
+          width: double.infinity,
+          padding: EdgeInsets.all(16),
+          margin: EdgeInsets.all(2),
+          decoration: BoxDecoration(
+            border: Border(bottom: BorderSide(width: 1)),
+          ),
+          child: Text(suggestion),
+        );
       },
       onSelected: (String suggestion) {
+        weatherController.showSearchButton.value = true;
         weatherController.textFieldController.text = suggestion;
-        print('Selected city: $suggestion');
       },
     );
   }

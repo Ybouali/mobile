@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-// import 'package:get/get.dart';
+import 'package:get/get.dart';
 import 'package:medium_weather_app/features/components/city_search_field.dart';
-// import 'package:medium_weather_app/features/controller/weather_controller.dart';
+import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onSearch;
@@ -10,7 +10,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
-    // final wheatherController = Get.put(WeatherController());
+    final weatherController = Get.put(WeatherController());
     return AppBar(
       backgroundColor: Color(0xFF5B5E73),
       title: Container(
@@ -22,12 +22,18 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            IconButton(
-              onPressed: onSearch,
-              icon: Icon(Icons.search, color: Colors.grey),
-              constraints: const BoxConstraints(),
-              splashRadius: 20,
-            ),
+            Obx(() {
+              if (weatherController.showSearchButton.value) {
+                return IconButton(
+                  onPressed: onSearch,
+                  icon: Icon(Icons.search, color: Colors.grey),
+                  constraints: const BoxConstraints(),
+                  splashRadius: 20,
+                );
+              } else {
+                return SizedBox.shrink();
+              }
+            }),
             Expanded(
               child: CitySearchField(),
               // child: TextField(
