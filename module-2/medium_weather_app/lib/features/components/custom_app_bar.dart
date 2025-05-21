@@ -4,9 +4,8 @@ import 'package:medium_weather_app/features/components/city_search_field.dart';
 import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
-  final VoidCallback onSearch;
   final VoidCallback onGeo;
-  const CustomAppBar({super.key, required this.onSearch, required this.onGeo});
+  const CustomAppBar({super.key, required this.onGeo});
 
   @override
   Widget build(BuildContext context) {
@@ -25,8 +24,19 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             Obx(() {
               if (weatherController.showSearchButton.value) {
                 return IconButton(
-                  onPressed: onSearch,
-                  icon: Icon(Icons.search, color: Colors.grey),
+                  onPressed: () {
+                    weatherController.searchIsLoading.value = true;
+                    weatherController.onSearch();
+                    weatherController.searchIsLoading.value = false;
+                  },
+                  icon:
+                      weatherController.searchIsLoading.value
+                          ? SizedBox(
+                            width: 20,
+                            height: 20,
+                            child: CircularProgressIndicator(strokeWidth: 2),
+                          )
+                          : Icon(Icons.search, color: Colors.grey),
                   constraints: const BoxConstraints(),
                   splashRadius: 20,
                 );

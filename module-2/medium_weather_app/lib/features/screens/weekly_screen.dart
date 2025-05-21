@@ -13,7 +13,6 @@ class WeeklyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        onSearch: () => weatherController.onSearch(),
         onGeo: () => weatherController.getCurrentLoacation(),
       ),
       body: Center(

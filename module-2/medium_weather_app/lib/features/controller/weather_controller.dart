@@ -2,6 +2,7 @@ import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
@@ -20,9 +21,13 @@ class WeatherController extends GetxController {
   final RxInt selectedIndex = 0.obs;
   final RxString searchedText = ''.obs;
   late List<Widget> screen;
+  final RxBool searchIsLoading = false.obs;
   final RxString location = ''.obs;
+
   final RxInt numberTimeCallReq = 0.obs;
   final RxBool showSearchButton = true.obs;
+  final RxDouble currentLatitude = 0.0.obs;
+  final RxDouble currentLongitude = 0.0.obs;
 
   @override
   void onInit() {
@@ -30,7 +35,10 @@ class WeatherController extends GetxController {
       CurrentlyScreen(text: "Current"),
       TodayScreen(text: "Today"),
       WeeklyScreen(text: "Weekly"),
-      GeolocatorDeniedPermissionScreen(),
+      GeolocatorDeniedPermissionScreen(
+        errorText:
+            'Geolocation is not available, please enable it in your app settings !',
+      ),
     ];
 
     Future.delayed(Duration.zero, () async {
@@ -42,8 +50,12 @@ class WeatherController extends GetxController {
 
   void onSearch() {
     searchedText.value = textFieldController.text;
-    textFieldController.clear();
-    _getLanAndLongFromName();
+    showSearchButton.value = false;
+    // textFieldController.clear();
+    // print("FROM onSearch");
+    // print(searchedText.value);
+    // print("DONE onSearch");
+    getLanAndLongFromName();
   }
 
   Future<void> getCurrentLoacation() async {
@@ -91,26 +103,50 @@ class WeatherController extends GetxController {
       }
 
       Position position = await Geolocator.getCurrentPosition();
-      _getNameFromPosition(position.latitude, position.longitude);
+
+      currentLatitude.value = position.latitude;
+      currentLongitude.value = position.longitude;
+
+      // print("FROM getCurrentLoacation");
+      // print(currentLatitude.value);
+      // print(currentLongitude.value);
+      // print("DONE getCurrentLoacation");
+      getNameFromPosition();
     } catch (e) {
       selectedIndex.value = 3;
       Get.offAll(() => BottomNavMenu());
     }
   }
 
-  void _getNameFromPosition(double lat, double long) async {
-    List<Placemark> placemarks = await placemarkFromCoordinates(lat, long);
+  void getNameFromPosition() async {
+    // print("FROM getNameFromPosition");
+    // print(currentLatitude.value);
+    // print(currentLongitude.value);
+    // print("DONE getNameFromPosition");
+    List<Placemark> placemarks = await placemarkFromCoordinates(
+      currentLatitude.value,
+      currentLatitude.value,
+    );
     Placemark place = placemarks[0];
     location.value =
         '${place.locality}, ${place.administrativeArea}, ${place.country}';
+    // print("location.value");
+    // print(location.value);
     searchedText.value = location.value;
     textFieldController.text = location.value;
   }
 
-  void _getLanAndLongFromName() async {
+  void getLanAndLongFromName() async {
+    // print("------------- start  ---------");
+    // print(searchedText.value);
     List<Location> locations = await locationFromAddress(searchedText.value);
+
     Location loc = locations.first;
-    _getNameFromPosition(loc.latitude, loc.longitude);
+    currentLatitude.value = loc.latitude;
+    currentLongitude.value = loc.latitude;
+    // print("currentLatitude.value");
+    // print(currentLatitude.value);
+    getNameFromPosition();
   }
 
   Future<List<String>> fetchCitySuggestions() async {
@@ -118,7 +154,7 @@ class WeatherController extends GetxController {
       return [];
     }
 
-    const apiKey = "AIzaSyAYsnYxl_dKJDDM9N_wT6jQFG_x5rRcyiw";
+    final apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'];
 
     const String baseUrl =
         'https://maps.googleapis.com/maps/api/place/autocomplete/json';
@@ -137,6 +173,21 @@ class WeatherController extends GetxController {
       }).toList();
     } else {
       throw Exception("Failed to fetch suggestions");
+    }
+  }
+
+  void getCurrentWeather() async {
+    final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
+
+    final String url =
+        "https://api.openweathermap.org/data/3.0/onecall?lat=${currentLatitude.value}&lon=${currentLongitude.value}&exclude=current,daily&appid=$apiKeyWeather";
+
+    final res = await http.get(Uri.parse(url));
+
+    if (res.statusCode == 200) {
+      // print(jsonDecode(res.body));
+    } else {
+      throw Exception("Failed to fetch weather curr");
     }
   }
 }

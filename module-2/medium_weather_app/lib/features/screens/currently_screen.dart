@@ -13,7 +13,6 @@ class CurrentlyScreen extends StatelessWidget {
 
     return Scaffold(
       appBar: CustomAppBar(
-        onSearch: () => wheatherController.onSearch(),
         onGeo: () => wheatherController.getCurrentLoacation(),
       ),
       body: Center(
@@ -21,7 +20,7 @@ class CurrentlyScreen extends StatelessWidget {
           () => Padding(
             padding: const EdgeInsets.all(8.0),
             child: Text(
-              '$text\n${wheatherController.searchedText.value}',
+              '${wheatherController.location.value}\n',
               style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
             ),
           ),
