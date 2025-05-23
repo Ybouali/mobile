@@ -7,6 +7,7 @@ import 'package:geocoding/geocoding.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
+import 'package:medium_weather_app/features/models/weather_model.dart';
 import 'package:medium_weather_app/features/screens/currently_screen.dart';
 import 'package:medium_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:medium_weather_app/features/screens/today_screen.dart';
@@ -19,10 +20,13 @@ class WeatherController extends GetxController {
   // Variables
   final TextEditingController textFieldController = TextEditingController();
   final RxInt selectedIndex = 0.obs;
-  final RxString searchedText = ''.obs;
   late List<Widget> screen;
   final RxBool searchIsLoading = false.obs;
   final RxString location = ''.obs;
+  final RxString city = ''.obs;
+  final RxString country = ''.obs;
+  final RxString state = ''.obs;
+  final Rx<WeatherModel?> curr = Rx<WeatherModel?>(null);
 
   final RxInt numberTimeCallReq = 0.obs;
   final RxBool showSearchButton = true.obs;
@@ -49,13 +53,15 @@ class WeatherController extends GetxController {
   }
 
   void onSearch() {
-    searchedText.value = textFieldController.text;
-    showSearchButton.value = false;
-    // textFieldController.clear();
-    // print("FROM onSearch");
-    // print(searchedText.value);
-    // print("DONE onSearch");
     getLanAndLongFromName();
+    if (selectedIndex.value == 0) {
+      // Current Screen
+      getCurrentWeather();
+    } else if (selectedIndex.value == 1) {
+      // Today Screen
+    } else if (selectedIndex.value == 2) {
+      // Weekly Screen
+    }
   }
 
   Future<void> getCurrentLoacation() async {
@@ -107,10 +113,6 @@ class WeatherController extends GetxController {
       currentLatitude.value = position.latitude;
       currentLongitude.value = position.longitude;
 
-      // print("FROM getCurrentLoacation");
-      // print(currentLatitude.value);
-      // print(currentLongitude.value);
-      // print("DONE getCurrentLoacation");
       getNameFromPosition();
     } catch (e) {
       selectedIndex.value = 3;
@@ -119,33 +121,25 @@ class WeatherController extends GetxController {
   }
 
   void getNameFromPosition() async {
-    // print("FROM getNameFromPosition");
-    // print(currentLatitude.value);
-    // print(currentLongitude.value);
-    // print("DONE getNameFromPosition");
     List<Placemark> placemarks = await placemarkFromCoordinates(
       currentLatitude.value,
-      currentLatitude.value,
+      currentLongitude.value,
     );
     Placemark place = placemarks[0];
-    location.value =
-        '${place.locality}, ${place.administrativeArea}, ${place.country}';
-    // print("location.value");
-    // print(location.value);
-    searchedText.value = location.value;
-    textFieldController.text = location.value;
+
+    city.value = place.locality!;
+    state.value = place.administrativeArea!;
+    country.value = place.country!;
   }
 
   void getLanAndLongFromName() async {
-    // print("------------- start  ---------");
-    // print(searchedText.value);
-    List<Location> locations = await locationFromAddress(searchedText.value);
+    List<Location> locations = await locationFromAddress(
+      textFieldController.text,
+    );
 
     Location loc = locations.first;
     currentLatitude.value = loc.latitude;
-    currentLongitude.value = loc.latitude;
-    // print("currentLatitude.value");
-    // print(currentLatitude.value);
+    currentLongitude.value = loc.longitude;
     getNameFromPosition();
   }
 
@@ -177,17 +171,22 @@ class WeatherController extends GetxController {
   }
 
   void getCurrentWeather() async {
-    final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
+    try {
+      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
 
-    final String url =
-        "https://api.openweathermap.org/data/3.0/onecall?lat=${currentLatitude.value}&lon=${currentLongitude.value}&exclude=current,daily&appid=$apiKeyWeather";
+      final String url =
+          "http://api.weatherapi.com/v1/current.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}";
+      final res = await http.get(Uri.parse(url));
 
-    final res = await http.get(Uri.parse(url));
-
-    if (res.statusCode == 200) {
-      // print(jsonDecode(res.body));
-    } else {
-      throw Exception("Failed to fetch weather curr");
+      if (res.statusCode == 200) {
+        curr.value = WeatherModel.fromJson(jsonDecode(res.body), false);
+      } else if (res.statusCode == 401) {
+        throw Exception('Invalid API key or unauthorized access');
+      } else {
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      throw Exception('Failed to fetch weather: $e');
     }
   }
 }

@@ -19,46 +19,32 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           border: Border(right: BorderSide(color: Colors.white, width: 2)),
         ),
         child: Row(
+          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           mainAxisSize: MainAxisSize.min,
           children: [
-            Obx(() {
-              if (weatherController.showSearchButton.value) {
-                return IconButton(
-                  onPressed: () {
-                    weatherController.searchIsLoading.value = true;
-                    weatherController.onSearch();
-                    weatherController.searchIsLoading.value = false;
-                  },
-                  icon:
-                      weatherController.searchIsLoading.value
-                          ? SizedBox(
-                            width: 20,
-                            height: 20,
-                            child: CircularProgressIndicator(strokeWidth: 2),
-                          )
-                          : Icon(Icons.search, color: Colors.grey),
-                  constraints: const BoxConstraints(),
-                  splashRadius: 20,
-                );
-              } else {
-                return SizedBox.shrink();
-              }
-            }),
-            Expanded(
-              child: CitySearchField(),
-              // child: TextField(
-              //   controller: wheatherController.textFieldController,
-              //   decoration: InputDecoration(
-              //     hintStyle: TextStyle(color: Colors.grey),
-              //     hintText: "Search location ...",
-              //     border: InputBorder.none,
-              //     contentPadding: const EdgeInsets.symmetric(
-              //       horizontal: 10,
-              //       vertical: 10,
-              //     ),
-              //   ),
-              // ),
+            IgnorePointer(
+              ignoring: weatherController.searchIsLoading.value,
+              child: Obx(() {
+                if (weatherController.showSearchButton.value) {
+                  return IconButton(
+                    onPressed: () {
+                      if (weatherController
+                          .textFieldController
+                          .text
+                          .isNotEmpty) {
+                        weatherController.onSearch();
+                      }
+                    },
+                    icon: Icon(Icons.search, color: Colors.grey),
+                    constraints: const BoxConstraints(),
+                    splashRadius: 20,
+                  );
+                } else {
+                  return SizedBox.shrink();
+                }
+              }),
             ),
+            Expanded(child: CitySearchField()),
           ],
         ),
       ),

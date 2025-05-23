@@ -18,7 +18,7 @@ class WeeklyScreen extends StatelessWidget {
       body: Center(
         child: Obx(
           () => Text(
-            '$text\n${weatherController.searchedText.value}',
+            '$text\n${weatherController.textFieldController.text}',
             style: TextStyle(fontWeight: FontWeight.bold, fontSize: 20),
           ),
         ),
