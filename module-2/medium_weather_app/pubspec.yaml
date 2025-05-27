@@ -20,6 +20,9 @@ dependencies:
     http: ^1.4.0
     flutter_typeahead: ^5.2.0
     flutter_dotenv: ^5.2.1
+    intl: ^0.20.2
+    connectivity_plus: ^6.1.4
+    internet_connection_checker: ^3.0.1
 
 dev_dependencies:
     flutter_test:

@@ -32,7 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
                           .textFieldController
                           .text
                           .isNotEmpty) {
-                        weatherController.onSearch();
+                        weatherController.getTheWeatherAndSetTheValues();
                       }
                     },
                     icon: Icon(Icons.search, color: Colors.grey),

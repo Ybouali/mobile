@@ -8,11 +8,13 @@ import 'package:geolocator/geolocator.dart';
 import 'package:get/get.dart';
 import 'package:http/http.dart' as http;
 import 'package:medium_weather_app/features/models/weather_model.dart';
+import 'package:medium_weather_app/features/models/weekly_weather_model.dart';
 import 'package:medium_weather_app/features/screens/currently_screen.dart';
 import 'package:medium_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:medium_weather_app/features/screens/today_screen.dart';
 import 'package:medium_weather_app/features/screens/weekly_screen.dart';
 import 'package:medium_weather_app/navigation/bottom_nav_menu.dart';
+import 'package:medium_weather_app/services/network_service.dart';
 
 class WeatherController extends GetxController {
   static WeatherController get instance => Get.find();
@@ -32,6 +34,15 @@ class WeatherController extends GetxController {
   final RxBool showSearchButton = true.obs;
   final RxDouble currentLatitude = 0.0.obs;
   final RxDouble currentLongitude = 0.0.obs;
+  final Rx<Map<int, String>> errorStrings = Rx<Map<int, String>>({
+    1: 'Geolocation is not available, please enable it in your app settings !',
+    2: 'The service connection is lost check your internet connection or try again later',
+    3: 'Clould not find any result for the supplied address or coordinates',
+  });
+  final RxInt errorNumber = 1.obs;
+  final Rx<List<WeatherModel>?> weatherDay = Rx<List<WeatherModel>?>(null);
+  final Rx<List<WeeklyWeatherModel>?> weatherWeek =
+      Rx<List<WeeklyWeatherModel>?>(null);
 
   @override
   void onInit() {
@@ -40,31 +51,38 @@ class WeatherController extends GetxController {
       TodayScreen(text: "Today"),
       WeeklyScreen(text: "Weekly"),
       GeolocatorDeniedPermissionScreen(
-        errorText:
-            'Geolocation is not available, please enable it in your app settings !',
+        errorText: errorStrings.value[errorNumber.value].toString(),
       ),
     ];
 
     Future.delayed(Duration.zero, () async {
-      await getCurrentLoacation();
+      await getCurrentLocation();
+
+      if (!(await NetworkService.isConnected())) {
+        selectedIndex.value = 3;
+        errorNumber.value = 2;
+        Get.offAll(() => BottomNavMenu());
+      }
     });
 
     super.onInit();
   }
 
-  void onSearch() {
+  Future<void> getTheWeatherAndSetTheValues() async {
     getLanAndLongFromName();
     if (selectedIndex.value == 0) {
       // Current Screen
-      getCurrentWeather();
+      await getCurrentWeather();
     } else if (selectedIndex.value == 1) {
       // Today Screen
+      await getTheDayWeather();
     } else if (selectedIndex.value == 2) {
       // Weekly Screen
+      await getTheWeekWeather();
     }
   }
 
-  Future<void> getCurrentLoacation() async {
+  Future<void> getCurrentLocation() async {
     try {
       numberTimeCallReq.value += 1;
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
@@ -113,9 +131,17 @@ class WeatherController extends GetxController {
       currentLatitude.value = position.latitude;
       currentLongitude.value = position.longitude;
 
+      if (currentLatitude.value == 0.0 || currentLongitude.value == 0.0) {
+        selectedIndex.value = 3;
+        errorNumber.value = 3;
+        Get.offAll(() => BottomNavMenu());
+      }
       getNameFromPosition();
+
+      getTheWeatherAndSetTheValues();
     } catch (e) {
       selectedIndex.value = 3;
+      errorNumber.value = 2;
       Get.offAll(() => BottomNavMenu());
     }
   }
@@ -130,17 +156,22 @@ class WeatherController extends GetxController {
     city.value = place.locality!;
     state.value = place.administrativeArea!;
     country.value = place.country!;
+    textFieldController.text = place.locality!;
   }
 
   void getLanAndLongFromName() async {
-    List<Location> locations = await locationFromAddress(
-      textFieldController.text,
-    );
+    try {
+      List<Location> locations = await locationFromAddress(
+        textFieldController.text,
+      );
 
-    Location loc = locations.first;
-    currentLatitude.value = loc.latitude;
-    currentLongitude.value = loc.longitude;
-    getNameFromPosition();
+      Location loc = locations.first;
+      currentLatitude.value = loc.latitude;
+      currentLongitude.value = loc.longitude;
+      getNameFromPosition();
+    } catch (e) {
+      // Just Ignoring the e
+    }
   }
 
   Future<List<String>> fetchCitySuggestions() async {
@@ -170,7 +201,7 @@ class WeatherController extends GetxController {
     }
   }
 
-  void getCurrentWeather() async {
+  Future<void> getCurrentWeather() async {
     try {
       final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
 
@@ -186,6 +217,76 @@ class WeatherController extends GetxController {
         throw Exception('Failed to load weather data');
       }
     } catch (e) {
+      throw Exception('Failed to fetch weather: $e');
+    }
+  }
+
+  Future<void> getTheDayWeather() async {
+    try {
+      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
+
+      final String url =
+          "http://api.weatherapi.com/v1/forecast.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}&days=1&aqi=no&alerts=no";
+
+      final res = await http.get(Uri.parse(url));
+
+      if (res.statusCode == 200) {
+        final data = json.decode(res.body);
+        final hourlyData = data['forecast']['forecastday'][0]['hour'] as List;
+
+        weatherDay.value =
+            hourlyData.map((hDWeather) {
+              return WeatherModel(
+                tempC: hDWeather['temp_c']?.toDouble() ?? 0.0,
+                windKph: hDWeather['wind_kph']?.toDouble() ?? 0.0,
+                date: DateTime.parse(hDWeather['time']),
+              );
+            }).toList();
+      } else if (res.statusCode == 401) {
+        weatherDay.value = [];
+        throw Exception('Invalid API key or unauthorized access');
+      } else {
+        weatherDay.value = [];
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      weatherDay.value = [];
+      throw Exception('Failed to fetch weather: $e');
+    }
+  }
+
+  Future<void> getTheWeekWeather() async {
+    try {
+      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
+
+      final String url =
+          "http://api.weatherapi.com/v1/forecast.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}&days=7&aqi=no&alerts=no";
+
+      final res = await http.get(Uri.parse(url));
+
+      if (res.statusCode == 200) {
+        final data = json.decode(res.body);
+        final hourlyData = data['forecast']['forecastday'] as List;
+
+        weatherWeek.value =
+            hourlyData.map((day) {
+              final dayData = day['day'];
+              return WeeklyWeatherModel(
+                date: DateTime.parse(day['date']),
+                minTempC: dayData['mintemp_c']?.toDouble() ?? 0.0,
+                maxTempC: dayData['maxtemp_c']?.toDouble() ?? 0.0,
+                description: dayData['condition']['text'] ?? 'No description',
+              );
+            }).toList();
+      } else if (res.statusCode == 401) {
+        weatherWeek.value = [];
+        throw Exception('Invalid API key or unauthorized access');
+      } else {
+        weatherWeek.value = [];
+        throw Exception('Failed to load weather data');
+      }
+    } catch (e) {
+      weatherWeek.value = [];
       throw Exception('Failed to fetch weather: $e');
     }
   }

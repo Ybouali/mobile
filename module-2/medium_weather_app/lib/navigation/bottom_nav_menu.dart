@@ -18,8 +18,10 @@ class BottomNavMenu extends StatelessWidget {
               wheatherController.selectedIndex.value > 2
                   ? 0
                   : wheatherController.selectedIndex.value,
-          onDestinationSelected:
-              (value) => wheatherController.selectedIndex.value = value,
+          onDestinationSelected: (value) async {
+            wheatherController.selectedIndex.value = value;
+            await wheatherController.getTheWeatherAndSetTheValues();
+          },
           destinations: [
             NavigationDestination(
               icon: Icon(Icons.settings),

@@ -13,9 +13,7 @@ class GeolocatorDeniedPermissionScreen extends StatelessWidget {
     final weatherController = Get.put(WeatherController());
 
     return Scaffold(
-      appBar: CustomAppBar(
-        onGeo: () => weatherController.getCurrentLoacation(),
-      ),
+      appBar: CustomAppBar(onGeo: () => weatherController.getCurrentLocation()),
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8),

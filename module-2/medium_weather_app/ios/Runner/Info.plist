@@ -7,6 +7,9 @@
 	<key>NSLocationAlwaysUsageDescription</key>
 	<string>This app needs access to your location all the time.</string>
 
+	<key>NSLocalNetworkUsageDescription</key>
+	<string>Check internet connection status</string>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleDisplayName</key>
