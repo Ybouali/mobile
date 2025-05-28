@@ -88,6 +88,7 @@ class WeatherController extends GetxController {
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
         selectedIndex.value = 3;
+        errorNumber.value = 1;
         Get.offAll(() => BottomNavMenu());
         return;
       }
@@ -98,6 +99,7 @@ class WeatherController extends GetxController {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
           selectedIndex.value = 3;
+          errorNumber.value = 1;
           Get.offAll(() => BottomNavMenu());
           return;
         }
