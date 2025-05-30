@@ -11,10 +11,11 @@
 	<string>Check internet connection status</string>
 
 	<key>NSLocalNetworkUsageDescription</key>
-	<string>This app requires access to the local network for debugging purposes.</string>
+	<string>Required for debugging with Flutter</string>
 	<key>NSBonjourServices</key>
 	<array>
 		<string>_dartobservatory._tcp</string>
+		<string>_services._dns-sd._udp</string>
 	</array>
 
 

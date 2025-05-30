@@ -13,8 +13,8 @@ import 'package:medium_weather_app/features/screens/currently_screen.dart';
 import 'package:medium_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:medium_weather_app/features/screens/today_screen.dart';
 import 'package:medium_weather_app/features/screens/weekly_screen.dart';
+import 'package:medium_weather_app/features/services/network_service.dart';
 import 'package:medium_weather_app/navigation/bottom_nav_menu.dart';
-import 'package:medium_weather_app/services/network_service.dart';
 
 class WeatherController extends GetxController {
   static WeatherController get instance => Get.find();
@@ -50,9 +50,7 @@ class WeatherController extends GetxController {
       CurrentlyScreen(text: "Current"),
       TodayScreen(text: "Today"),
       WeeklyScreen(text: "Weekly"),
-      GeolocatorDeniedPermissionScreen(
-        errorText: errorStrings.value[errorNumber.value].toString(),
-      ),
+      GeolocatorDeniedPermissionScreen(),
     ];
 
     Future.delayed(Duration.zero, () async {
@@ -154,6 +152,13 @@ class WeatherController extends GetxController {
       currentLongitude.value,
     );
     Placemark place = placemarks[0];
+
+    if (!place.locality!.contains(textFieldController.text)) {
+      print("HELLO 1");
+      selectedIndex.value = 3;
+      errorNumber.value = 3;
+      Get.offAll(() => BottomNavMenu());
+    }
 
     city.value = place.locality!;
     state.value = place.administrativeArea!;

@@ -4,9 +4,7 @@ import 'package:medium_weather_app/features/components/custom_app_bar.dart';
 import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class GeolocatorDeniedPermissionScreen extends StatelessWidget {
-  final String errorText;
-
-  const GeolocatorDeniedPermissionScreen({super.key, required this.errorText});
+  const GeolocatorDeniedPermissionScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -17,7 +15,15 @@ class GeolocatorDeniedPermissionScreen extends StatelessWidget {
       body: Center(
         child: Padding(
           padding: const EdgeInsets.all(8),
-          child: Text(errorText, style: TextStyle(color: Colors.red)),
+          child: Obx(
+            () => Text(
+              weatherController
+                  .errorStrings
+                  .value[weatherController.errorNumber.value]
+                  .toString(),
+              style: TextStyle(color: Colors.red),
+            ),
+          ),
         ),
       ),
     );
