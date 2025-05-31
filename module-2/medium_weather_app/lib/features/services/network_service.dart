@@ -9,22 +9,11 @@ class NetworkService {
       );
 
   static Future<bool> isConnected() async {
-    final connectivityRes = await Connectivity().checkConnectivity();
+    final connectivityResult = await Connectivity().checkConnectivity();
 
-    if (connectivityRes.isEmpty ||
-        connectivityRes.contains(ConnectivityResult.none)) {
+    if (connectivityResult.isEmpty) {
       return false;
     }
-
     return await _connectionChecker.hasConnection;
-  }
-
-  static Stream<bool> get connectionStream {
-    return Connectivity().onConnectivityChanged.asyncMap((results) async {
-      if (results.isEmpty || results.contains(ConnectivityResult.none)) {
-        return false;
-      }
-      return await _connectionChecker.hasConnection;
-    });
   }
 }

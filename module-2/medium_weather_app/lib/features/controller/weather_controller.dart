@@ -55,18 +55,31 @@ class WeatherController extends GetxController {
 
     Future.delayed(Duration.zero, () async {
       await getCurrentLocation();
-
-      if (!(await NetworkService.isConnected())) {
-        selectedIndex.value = 3;
-        errorNumber.value = 2;
-        Get.offAll(() => BottomNavMenu());
-      }
     });
 
     super.onInit();
   }
 
   Future<void> getTheWeatherAndSetTheValues() async {
+    final isConnected = await NetworkService.isConnected();
+    if (!isConnected) {
+      _goToErrorPage(2);
+      return;
+    }
+
+    if (!(await _checkPermission())) {
+      _goToErrorPage(1);
+      return;
+    }
+
+    if (textFieldController.text.length < 6) {
+      _goToErrorPage(3);
+      return;
+    }
+    if (selectedIndex.value == 3) {
+      selectedIndex.value = 0;
+      Get.offAll(() => BottomNavMenu());
+    }
     getLanAndLongFromName();
     if (selectedIndex.value == 0) {
       // Current Screen
@@ -80,14 +93,29 @@ class WeatherController extends GetxController {
     }
   }
 
+  void _goToErrorPage(int n) {
+    selectedIndex.value = 3;
+    errorNumber.value = n;
+    Get.offAll(() => BottomNavMenu());
+  }
+
+  Future<bool> _checkPermission() async {
+    LocationPermission permission = await Geolocator.checkPermission();
+
+    return permission == LocationPermission.denied;
+  }
+
   Future<void> getCurrentLocation() async {
+    final isConnected = await NetworkService.isConnected();
+    if (!isConnected) {
+      _goToErrorPage(2);
+      return;
+    }
     try {
       numberTimeCallReq.value += 1;
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        selectedIndex.value = 3;
-        errorNumber.value = 1;
-        Get.offAll(() => BottomNavMenu());
+        _goToErrorPage(1);
         return;
       }
 
@@ -96,9 +124,7 @@ class WeatherController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          selectedIndex.value = 3;
-          errorNumber.value = 1;
-          Get.offAll(() => BottomNavMenu());
+          _goToErrorPage(1);
           return;
         }
       }
@@ -114,6 +140,7 @@ class WeatherController extends GetxController {
           confirm: ElevatedButton(
             onPressed: () {
               AppSettings.openAppSettings();
+              Get.back();
             },
             child: const Text("Open Settings"),
           ),
@@ -132,17 +159,13 @@ class WeatherController extends GetxController {
       currentLongitude.value = position.longitude;
 
       if (currentLatitude.value == 0.0 || currentLongitude.value == 0.0) {
-        selectedIndex.value = 3;
-        errorNumber.value = 3;
-        Get.offAll(() => BottomNavMenu());
+        _goToErrorPage(3);
       }
       getNameFromPosition();
 
       getTheWeatherAndSetTheValues();
     } catch (e) {
-      selectedIndex.value = 3;
-      errorNumber.value = 2;
-      Get.offAll(() => BottomNavMenu());
+      _goToErrorPage(1);
     }
   }
 
@@ -152,13 +175,6 @@ class WeatherController extends GetxController {
       currentLongitude.value,
     );
     Placemark place = placemarks[0];
-
-    if (!place.locality!.contains(textFieldController.text)) {
-      print("HELLO 1");
-      selectedIndex.value = 3;
-      errorNumber.value = 3;
-      Get.offAll(() => BottomNavMenu());
-    }
 
     city.value = place.locality!;
     state.value = place.administrativeArea!;

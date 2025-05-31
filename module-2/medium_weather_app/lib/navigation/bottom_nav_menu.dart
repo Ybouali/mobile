@@ -7,39 +7,46 @@ class BottomNavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wheatherController = Get.put(WeatherController());
+    final weatherController = Get.put(WeatherController());
 
-    return Scaffold(
-      bottomNavigationBar: Obx(
-        () => NavigationBar(
-          height: 80,
-          elevation: 0,
-          selectedIndex:
-              wheatherController.selectedIndex.value > 2
-                  ? 0
-                  : wheatherController.selectedIndex.value,
-          onDestinationSelected: (value) async {
-            wheatherController.selectedIndex.value = value;
-            await wheatherController.getTheWeatherAndSetTheValues();
-          },
-          destinations: [
-            NavigationDestination(
-              icon: Icon(Icons.settings),
-              label: "Currently",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.calendar_today),
-              label: "Today",
-            ),
-            NavigationDestination(
-              icon: Icon(Icons.calendar_month),
-              label: "Weekly",
-            ),
-          ],
+    return GestureDetector(
+      behavior: HitTestBehavior.translucent,
+      onTap: () {
+        FocusManager.instance.primaryFocus?.unfocus();
+        weatherController.showSearchButton.value = true;
+      },
+      child: Scaffold(
+        bottomNavigationBar: Obx(
+          () => NavigationBar(
+            height: 80,
+            elevation: 0,
+            selectedIndex:
+                weatherController.selectedIndex.value > 2
+                    ? 0
+                    : weatherController.selectedIndex.value,
+            onDestinationSelected: (value) async {
+              weatherController.selectedIndex.value = value;
+              await weatherController.getTheWeatherAndSetTheValues();
+            },
+            destinations: [
+              NavigationDestination(
+                icon: Icon(Icons.settings),
+                label: "Currently",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_today),
+                label: "Today",
+              ),
+              NavigationDestination(
+                icon: Icon(Icons.calendar_month),
+                label: "Weekly",
+              ),
+            ],
+          ),
         ),
-      ),
-      body: Obx(
-        () => wheatherController.screen[wheatherController.selectedIndex.value],
+        body: Obx(
+          () => weatherController.screen[weatherController.selectedIndex.value],
+        ),
       ),
     );
   }
