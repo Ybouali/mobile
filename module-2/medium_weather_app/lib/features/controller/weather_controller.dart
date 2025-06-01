@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:convert';
 
 import 'package:app_settings/app_settings.dart';
@@ -60,14 +61,40 @@ class WeatherController extends GetxController {
     super.onInit();
   }
 
+  @override
+  void onClose() {
+    textFieldController.dispose();
+
+    selectedIndex.close();
+    searchIsLoading.close();
+    location.close();
+    city.close();
+    country.close();
+    state.close();
+    curr.close();
+    numberTimeCallReq.close();
+    showSearchButton.close();
+    currentLatitude.close();
+    currentLongitude.close();
+    errorStrings.close();
+    errorNumber.close();
+    weatherDay.close();
+    weatherWeek.close();
+
+    super.onClose();
+  }
+
   Future<void> getTheWeatherAndSetTheValues() async {
+    if (textFieldController.text.isEmpty) {
+      return;
+    }
     final isConnected = await NetworkService.isConnected();
     if (!isConnected) {
       _goToErrorPage(2);
       return;
     }
 
-    if (!(await _checkPermission())) {
+    if (await _checkPermission()) {
       _goToErrorPage(1);
       return;
     }
@@ -76,6 +103,7 @@ class WeatherController extends GetxController {
       _goToErrorPage(3);
       return;
     }
+
     if (selectedIndex.value == 3) {
       selectedIndex.value = 0;
       Get.offAll(() => BottomNavMenu());
@@ -102,10 +130,12 @@ class WeatherController extends GetxController {
   Future<bool> _checkPermission() async {
     LocationPermission permission = await Geolocator.checkPermission();
 
-    return permission == LocationPermission.denied;
+    return permission == LocationPermission.denied ||
+        permission == LocationPermission.deniedForever;
   }
 
   Future<void> getCurrentLocation() async {
+    textFieldController.clear();
     final isConnected = await NetworkService.isConnected();
     if (!isConnected) {
       _goToErrorPage(2);
@@ -129,7 +159,8 @@ class WeatherController extends GetxController {
         }
       }
 
-      if (permission == LocationPermission.deniedForever &&
+      if ((permission == LocationPermission.deniedForever ||
+              permission == LocationPermission.denied) &&
           numberTimeCallReq.value == 2) {
         numberTimeCallReq.value = 1;
         Get.defaultDialog(
