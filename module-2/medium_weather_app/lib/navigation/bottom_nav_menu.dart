@@ -12,6 +12,7 @@ class BottomNavMenu extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
+        debugPrint("GestureDetector BottomNavMenu");
         FocusManager.instance.primaryFocus?.unfocus();
         weatherController.showSearchButton.value = true;
       },

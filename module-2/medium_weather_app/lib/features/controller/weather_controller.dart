@@ -106,7 +106,6 @@ class WeatherController extends GetxController {
 
     if (selectedIndex.value == 3) {
       selectedIndex.value = 0;
-      Get.offAll(() => BottomNavMenu());
     }
     getLanAndLongFromName();
     if (selectedIndex.value == 0) {
@@ -135,7 +134,9 @@ class WeatherController extends GetxController {
   }
 
   Future<void> getCurrentLocation() async {
-    textFieldController.clear();
+    if (textFieldController.text.isNotEmpty) {
+      textFieldController.clear();
+    }
     final isConnected = await NetworkService.isConnected();
     if (!isConnected) {
       _goToErrorPage(2);
@@ -192,15 +193,16 @@ class WeatherController extends GetxController {
       if (currentLatitude.value == 0.0 || currentLongitude.value == 0.0) {
         _goToErrorPage(3);
       }
-      getNameFromPosition();
 
-      getTheWeatherAndSetTheValues();
+      await getNameFromPosition();
+
+      await getTheWeatherAndSetTheValues();
     } catch (e) {
       _goToErrorPage(1);
     }
   }
 
-  void getNameFromPosition() async {
+  Future<void> getNameFromPosition() async {
     List<Placemark> placemarks = await placemarkFromCoordinates(
       currentLatitude.value,
       currentLongitude.value,
@@ -210,7 +212,7 @@ class WeatherController extends GetxController {
     city.value = place.locality!;
     state.value = place.administrativeArea!;
     country.value = place.country!;
-    textFieldController.text = place.locality!;
+    textFieldController.text = city.value;
   }
 
   void getLanAndLongFromName() async {
