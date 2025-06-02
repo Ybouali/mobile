@@ -19,7 +19,7 @@ class CitySearchField extends StatelessWidget {
       },
       builder: (context, controller, focusNode) {
         return TextField(
-          controller: weatherController.textFieldController,
+          controller: controller,
           focusNode: focusNode,
           decoration: const InputDecoration(
             hintText: 'Search City',

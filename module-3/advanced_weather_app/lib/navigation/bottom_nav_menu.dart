@@ -1,3 +1,4 @@
+import 'package:advanced_weather_app/features/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:advanced_weather_app/features/controller/weather_controller.dart';
@@ -12,9 +13,9 @@ class BottomNavMenu extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        debugPrint("GestureDetector BottomNavMenu");
         FocusManager.instance.primaryFocus?.unfocus();
         weatherController.showSearchButton.value = true;
+        weatherController.suggestionList.value = [];
       },
       child: Scaffold(
         bottomNavigationBar: Obx(
@@ -45,7 +46,14 @@ class BottomNavMenu extends StatelessWidget {
           ),
         ),
         body: Obx(
-          () => weatherController.screen[weatherController.selectedIndex.value],
+          () => Stack(
+            children: [
+              weatherController.screen[weatherController.selectedIndex.value],
+
+              if (!weatherController.showSearchButton.value)
+                Positioned(child: SearchScreen()),
+            ],
+          ),
         ),
       ),
     );

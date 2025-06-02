@@ -1,6 +1,6 @@
+import 'package:advanced_weather_app/features/components/location_search_field.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:advanced_weather_app/features/components/city_search_field.dart';
 import 'package:advanced_weather_app/features/controller/weather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
@@ -18,34 +18,38 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
           color: Color(0xFF5B5E73),
           border: Border(right: BorderSide(color: Colors.white, width: 2)),
         ),
-        child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            IgnorePointer(
-              ignoring: weatherController.searchIsLoading.value,
-              child: Obx(() {
-                if (weatherController.showSearchButton.value) {
-                  return IconButton(
-                    onPressed: () {
-                      if (weatherController
-                          .textFieldController
-                          .text
-                          .isNotEmpty) {
-                        weatherController.getTheWeatherAndSetTheValues();
-                      }
-                    },
-                    icon: Icon(Icons.search, color: Colors.grey),
-                    constraints: const BoxConstraints(),
-                    splashRadius: 20,
-                  );
-                } else {
-                  return SizedBox.shrink();
-                }
-              }),
-            ),
-            Expanded(child: CitySearchField()),
-          ],
+        child: Padding(
+          padding: const EdgeInsets.only(bottom: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              IgnorePointer(
+                ignoring: weatherController.searchIsLoading.value,
+                child: Obx(() {
+                  if (weatherController.showSearchButton.value) {
+                    return IconButton(
+                      onPressed: () {
+                        if (weatherController
+                            .textFieldController
+                            .text
+                            .isNotEmpty) {
+                          weatherController.getTheWeatherAndSetTheValues();
+                        }
+                      },
+                      icon: Icon(Icons.search, color: Colors.grey),
+                      constraints: const BoxConstraints(),
+                      splashRadius: 20,
+                    );
+                  } else {
+                    return SizedBox.shrink();
+                  }
+                }),
+              ),
+              // Expanded(child: CitySearchField()),
+              Expanded(child: LocationSearchField()),
+            ],
+          ),
         ),
       ),
       actions: [

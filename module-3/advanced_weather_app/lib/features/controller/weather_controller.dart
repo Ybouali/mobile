@@ -1,6 +1,5 @@
 import 'dart:async';
 import 'dart:convert';
-
 import 'package:app_settings/app_settings.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
@@ -44,6 +43,7 @@ class WeatherController extends GetxController {
   final Rx<List<WeatherModel>?> weatherDay = Rx<List<WeatherModel>?>(null);
   final Rx<List<WeeklyWeatherModel>?> weatherWeek =
       Rx<List<WeeklyWeatherModel>?>(null);
+  final Rx<List<String>> suggestionList = Rx<List<String>>([]);
 
   @override
   void onInit() {
@@ -230,9 +230,9 @@ class WeatherController extends GetxController {
     }
   }
 
-  Future<List<String>> fetchCitySuggestions() async {
+  Future<void> fetchCitySuggestions() async {
     if (textFieldController.text.isEmpty) {
-      return [];
+      return;
     }
 
     final apiKey = dotenv.env['GOOGLE_PLACES_API_KEY'];
@@ -249,9 +249,10 @@ class WeatherController extends GetxController {
     if (response.statusCode == 200) {
       final data = jsonDecode(response.body);
       final predictions = data['predictions'] as List;
-      return predictions.map((p) {
+      suggestionList.value = predictions.take(5).map((p) {
         return p['description'] as String;
       }).toList();
+      // print(suggestionList.value);
     } else {
       throw Exception("Failed to fetch suggestions");
     }
