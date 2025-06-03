@@ -18,42 +18,84 @@ class BottomNavMenu extends StatelessWidget {
         weatherController.suggestionList.value = [];
       },
       child: Scaffold(
+        extendBody: true,
         bottomNavigationBar: Obx(
-          () => NavigationBar(
-            height: 80,
-            elevation: 0,
-            selectedIndex: weatherController.selectedIndex.value > 2
-                ? 0
-                : weatherController.selectedIndex.value,
-            onDestinationSelected: (value) async {
-              weatherController.selectedIndex.value = value;
-              await weatherController.getTheWeatherAndSetTheValues();
-            },
-            destinations: [
-              NavigationDestination(
-                icon: Icon(Icons.settings),
-                label: "Currently",
+          () => Theme(
+            data: Theme.of(context).copyWith(
+              navigationBarTheme: NavigationBarThemeData(
+                labelTextStyle: WidgetStateProperty.resolveWith<TextStyle?>((
+                  Set<WidgetState> states,
+                ) {
+                  if (states.contains(WidgetState.selected)) {
+                    return TextStyle(color: Colors.amberAccent);
+                  }
+                  return TextStyle(color: Colors.white70);
+                }),
               ),
-              NavigationDestination(
-                icon: Icon(Icons.calendar_today),
-                label: "Today",
-              ),
-              NavigationDestination(
-                icon: Icon(Icons.calendar_month),
-                label: "Weekly",
-              ),
-            ],
+            ),
+            child: NavigationBar(
+              backgroundColor: Colors.transparent,
+              surfaceTintColor: Colors.transparent,
+              indicatorColor: Colors.transparent,
+              height: 80,
+              elevation: 0,
+              selectedIndex: weatherController.selectedIndex.value > 2
+                  ? 0
+                  : weatherController.selectedIndex.value,
+              onDestinationSelected: (value) async {
+                weatherController.selectedIndex.value = value;
+                await weatherController.getTheWeatherAndSetTheValues();
+              },
+              destinations: [
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.settings,
+                    color: weatherController.selectedIndex.value == 0
+                        ? Colors.amberAccent
+                        : Colors.white70,
+                  ),
+                  label: "Currently",
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.calendar_today,
+                    color: weatherController.selectedIndex.value == 1
+                        ? Colors.amberAccent
+                        : Colors.white70,
+                  ),
+                  label: "Today",
+                ),
+                NavigationDestination(
+                  icon: Icon(
+                    Icons.calendar_month,
+                    color: weatherController.selectedIndex.value == 2
+                        ? Colors.amberAccent
+                        : Colors.white70,
+                  ),
+                  label: "Weekly",
+                ),
+              ],
+            ),
           ),
         ),
-        body: Obx(
-          () => Stack(
-            children: [
-              weatherController.screen[weatherController.selectedIndex.value],
-
-              if (!weatherController.showSearchButton.value)
-                Positioned(child: SearchScreen()),
-            ],
-          ),
+        body: Stack(
+          children: [
+            Positioned.fill(
+              child: Image.asset(
+                'assets/background_weather_app.jpg',
+                fit: BoxFit.cover,
+              ),
+            ),
+            Obx(() {
+              if (!weatherController.showSearchButton.value) {
+                return Positioned(child: SearchScreen());
+              } else {
+                return weatherController.screen[weatherController
+                    .selectedIndex
+                    .value];
+              }
+            }),
+          ],
         ),
       ),
     );

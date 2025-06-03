@@ -11,6 +11,7 @@ class SearchScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(onGeo: () => weatherController.getCurrentLocation()),
       body: Obx(() {
         return Padding(

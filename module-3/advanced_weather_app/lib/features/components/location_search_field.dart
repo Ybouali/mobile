@@ -10,9 +10,10 @@ class LocationSearchField extends StatelessWidget {
   Widget build(BuildContext context) {
     return TextField(
       controller: weatherController.textFieldController,
-      cursorColor: Colors.black,
+      cursorColor: Colors.white,
       cursorHeight: 16,
       cursorWidth: 1,
+      style: TextStyle(color: Colors.white70, fontSize: 16),
       decoration: const InputDecoration(
         labelText: 'Search Location',
         labelStyle: TextStyle(color: Colors.blueGrey),

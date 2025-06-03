@@ -37,9 +37,15 @@ class SuggestionWidget extends StatelessWidget {
                   children: [
                     TextSpan(
                       text: first,
-                      style: const TextStyle(fontWeight: FontWeight.bold),
+                      style: const TextStyle(
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
                     ),
-                    TextSpan(text: secound),
+                    TextSpan(
+                      text: secound,
+                      style: TextStyle(color: Colors.white70),
+                    ),
                   ],
                 ),
                 overflow: TextOverflow.ellipsis,

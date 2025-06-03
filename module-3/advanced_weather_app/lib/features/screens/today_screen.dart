@@ -12,6 +12,7 @@ class TodayScreen extends StatelessWidget {
     final weatherController = Get.put(WeatherController());
 
     return Scaffold(
+      backgroundColor: Colors.transparent,
       appBar: CustomAppBar(onGeo: () => weatherController.getCurrentLocation()),
       body: SingleChildScrollView(
         child: Center(

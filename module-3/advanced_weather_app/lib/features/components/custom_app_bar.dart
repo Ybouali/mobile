@@ -11,11 +11,11 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   Widget build(BuildContext context) {
     final weatherController = Get.put(WeatherController());
     return AppBar(
-      backgroundColor: Color(0xFF5B5E73),
+      backgroundColor: Color.fromARGB(255, 56, 0, 75),
       title: Container(
         height: 40,
         decoration: BoxDecoration(
-          color: Color(0xFF5B5E73),
+          color: Color.fromARGB(255, 56, 0, 75),
           border: Border(right: BorderSide(color: Colors.white, width: 2)),
         ),
         child: Padding(
