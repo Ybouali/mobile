@@ -25,16 +25,15 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             mainAxisSize: MainAxisSize.min,
             children: [
               IconButton(
-                onPressed: () {
+                onPressed: () async {
                   if (weatherController.textFieldController.text.isNotEmpty) {
-                    weatherController.getTheWeatherAndSetTheValues();
+                    await weatherController.getTheWeatherAndSetTheValues();
                   }
                 },
                 icon: Icon(Icons.search, color: Colors.grey),
                 constraints: const BoxConstraints(),
                 splashRadius: 20,
               ),
-              // Expanded(child: CitySearchField()),
               Expanded(child: LocationSearchField()),
             ],
           ),

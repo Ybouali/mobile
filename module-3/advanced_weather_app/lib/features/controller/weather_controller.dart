@@ -273,6 +273,62 @@ class WeatherController extends GetxController {
     }
   }
 
+  String getAnimationForCurrentWeather() {
+    if (curr.value == null || curr.value!.condition.isEmpty) {
+      return "assets/animations/weather/sunny.json";
+    }
+
+    final String condition = curr.value!.condition.toLowerCase();
+    // debugPrint("Weather Condition: $condition");
+
+    // Rainy/Drizzly Conditions
+    if (condition.contains("rain") ||
+        condition.contains("drizzle") ||
+        condition.contains("shower") ||
+        condition.contains("thunder") ||
+        condition.contains("storm")) {
+      return "assets/animations/weather/rain.json";
+    }
+
+    // Snowy/Icy Conditions
+    if (condition.contains("snow") ||
+        condition.contains("blizzard") ||
+        condition.contains("sleet") ||
+        condition.contains("ice") ||
+        condition.contains("hail")) {
+      return "assets/animations/weather/snow.json";
+    }
+
+    // Foggy/Misty Conditions
+    if (condition.contains("mist") ||
+        condition.contains("fog") ||
+        condition.contains("haze")) {
+      return "assets/animations/weather/cloud.json";
+    }
+
+    // Cloudy Conditions
+    if (condition.contains("cloud") || condition.contains("overcast")) {
+      return "assets/animations/weather/cloud.json";
+    }
+
+    // Clear/Sunny Conditions
+    if (condition.contains("clear") ||
+        condition.contains("sunny") ||
+        condition.contains("fair")) {
+      return "assets/animations/weather/sunny.json";
+    }
+
+    // Extreme Weather (Fallback to storm animation)
+    if (condition.contains("tornado") ||
+        condition.contains("hurricane") ||
+        condition.contains("sandstorm") ||
+        condition.contains("ash")) {
+      return "assets/animations/weather/rain.json";
+    }
+
+    return "assets/animations/weather/sunny.json";
+  }
+
   Future<void> getTheDayWeather() async {
     try {
       final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
@@ -291,6 +347,7 @@ class WeatherController extends GetxController {
             tempC: hDWeather['temp_c']?.toDouble() ?? 0.0,
             windKph: hDWeather['wind_kph']?.toDouble() ?? 0.0,
             date: DateTime.parse(hDWeather['time']),
+            condition: "",
           );
         }).toList();
       } else if (res.statusCode == 401) {

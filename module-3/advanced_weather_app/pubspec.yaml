@@ -37,6 +37,10 @@ flutter:
         - .env
         - assets/background_weather_app.jpg
         - assets/animations/error/error_animation.json
+        - assets/animations/weather/snow.json
+        - assets/animations/weather/rain.json
+        - assets/animations/weather/cloud.json
+        - assets/animations/weather/sunny.json
 
     # example:
     # fonts:
