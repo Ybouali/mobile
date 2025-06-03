@@ -1,3 +1,4 @@
+import 'package:advanced_weather_app/features/screens/error_screen.dart';
 import 'package:advanced_weather_app/features/screens/search_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -13,8 +14,6 @@ class BottomNavMenu extends StatelessWidget {
     return GestureDetector(
       behavior: HitTestBehavior.translucent,
       onTap: () {
-        FocusManager.instance.primaryFocus?.unfocus();
-        weatherController.showSearchButton.value = true;
         weatherController.suggestionList.value = [];
       },
       child: Scaffold(
@@ -87,8 +86,10 @@ class BottomNavMenu extends StatelessWidget {
               ),
             ),
             Obx(() {
-              if (!weatherController.showSearchButton.value) {
+              if (weatherController.suggestionList.value.isNotEmpty) {
                 return Positioned(child: SearchScreen());
+              } else if (weatherController.selectedIndex.value == 3) {
+                return Positioned(child: ErrorScreen());
               } else {
                 return weatherController.screen[weatherController
                     .selectedIndex

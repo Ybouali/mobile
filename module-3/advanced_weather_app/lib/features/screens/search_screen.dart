@@ -22,7 +22,6 @@ class SearchScreen extends StatelessWidget {
               return SuggestionWidget(
                 suggestion: weatherController.suggestionList.value[index],
                 onTap: () {
-                  weatherController.showSearchButton.value = true;
                   weatherController.textFieldController.text =
                       weatherController.suggestionList.value[index];
                   weatherController.suggestionList.value = [];

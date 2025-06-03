@@ -10,11 +10,9 @@ import 'package:http/http.dart' as http;
 import 'package:advanced_weather_app/features/models/weather_model.dart';
 import 'package:advanced_weather_app/features/models/weekly_weather_model.dart';
 import 'package:advanced_weather_app/features/screens/currently_screen.dart';
-import 'package:advanced_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:advanced_weather_app/features/screens/today_screen.dart';
 import 'package:advanced_weather_app/features/screens/weekly_screen.dart';
 import 'package:advanced_weather_app/features/services/network_service.dart';
-import 'package:advanced_weather_app/navigation/bottom_nav_menu.dart';
 
 class WeatherController extends GetxController {
   static WeatherController get instance => Get.find();
@@ -31,7 +29,6 @@ class WeatherController extends GetxController {
   final Rx<WeatherModel?> curr = Rx<WeatherModel?>(null);
 
   final RxInt numberTimeCallReq = 0.obs;
-  final RxBool showSearchButton = true.obs;
   final RxDouble currentLatitude = 0.0.obs;
   final RxDouble currentLongitude = 0.0.obs;
   final Rx<Map<int, String>> errorStrings = Rx<Map<int, String>>({
@@ -44,6 +41,7 @@ class WeatherController extends GetxController {
   final Rx<List<WeeklyWeatherModel>?> weatherWeek =
       Rx<List<WeeklyWeatherModel>?>(null);
   final Rx<List<String>> suggestionList = Rx<List<String>>([]);
+  final textFieldFocusNode = FocusNode();
 
   @override
   void onInit() {
@@ -51,7 +49,6 @@ class WeatherController extends GetxController {
       CurrentlyScreen(text: "Current"),
       TodayScreen(text: "Today"),
       WeeklyScreen(text: "Weekly"),
-      GeolocatorDeniedPermissionScreen(),
     ];
 
     Future.delayed(Duration.zero, () async {
@@ -73,7 +70,6 @@ class WeatherController extends GetxController {
     state.close();
     curr.close();
     numberTimeCallReq.close();
-    showSearchButton.close();
     currentLatitude.close();
     currentLongitude.close();
     errorStrings.close();
@@ -123,7 +119,6 @@ class WeatherController extends GetxController {
   void _goToErrorPage(int n) {
     selectedIndex.value = 3;
     errorNumber.value = n;
-    Get.offAll(() => BottomNavMenu());
   }
 
   Future<bool> _checkPermission() async {
@@ -162,7 +157,7 @@ class WeatherController extends GetxController {
 
       if ((permission == LocationPermission.deniedForever ||
               permission == LocationPermission.denied) &&
-          numberTimeCallReq.value == 2) {
+          numberTimeCallReq.value >= 2) {
         numberTimeCallReq.value = 1;
         Get.defaultDialog(
           title: "Permission Required",

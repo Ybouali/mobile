@@ -24,10 +24,6 @@ class LocationSearchField extends StatelessWidget {
         weatherController.textFieldController.text = value;
         await weatherController.fetchCitySuggestions();
       },
-      onTap: () {
-        weatherController.showSearchButton.value = false;
-        weatherController.suggestionList.value = [];
-      },
     );
   }
 }
