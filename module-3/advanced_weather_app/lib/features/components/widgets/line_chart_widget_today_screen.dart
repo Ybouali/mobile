@@ -59,7 +59,7 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
               sideTitles: SideTitles(
                 showTitles: true,
                 reservedSize: 30,
-                interval: 2,
+                interval: 3,
                 getTitlesWidget: (value, meta) {
                   return Text(
                     getTimeLabel(value),
