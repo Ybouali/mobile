@@ -1,3 +1,4 @@
+import 'package:advanced_weather_app/features/components/widgets/line_chart_widget_today_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:advanced_weather_app/features/components/custom_app_bar.dart';
@@ -16,37 +17,71 @@ class TodayScreen extends StatelessWidget {
       appBar: CustomAppBar(onGeo: () => weatherController.getCurrentLocation()),
       body: SingleChildScrollView(
         child: Center(
-          child: Obx(
-            () => Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 30, vertical: 10),
-              child: Column(
-                children: [
-                  Text(weatherController.city.value),
-                  Text(weatherController.state.value),
-                  Text(weatherController.country.value),
+          child: Obx(() {
+            if (weatherController.curr.value != null) {
+              return Padding(
+                padding: const EdgeInsets.all(8),
+                child: Column(
+                  children: [
+                    const SizedBox(height: 30),
+                    Text(
+                      weatherController.city.value,
+                      style: TextStyle(
+                        color: Colors.lightBlue,
+                        fontWeight: FontWeight.bold,
+                        fontSize: 20,
+                      ),
+                    ),
+                    const SizedBox(height: 10),
+                    Text(
+                      "${weatherController.state.value}, ${weatherController.country.value}",
+                      style: TextStyle(color: Colors.white, fontSize: 25),
+                    ),
+                    const SizedBox(height: 20),
 
-                  // return a Colum of rows of hour and tempC, windKph
-                  if (weatherController.weatherDay.value != null &&
-                      weatherController.weatherDay.value!.isNotEmpty)
-                    ...weatherController.weatherDay.value!.map((weather) {
-                      return Padding(
-                        padding: const EdgeInsets.all(8.0),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    SingleChildScrollView(
+                      scrollDirection: Axis.horizontal,
+                      child: Container(
+                        height: 300,
+                        width: 1000,
+                        padding: EdgeInsets.all(10),
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(95, 187, 233, 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
                             Text(
-                              '${weather.date.hour.toString().padLeft(2, '0')}:00',
+                              "Today temperatures",
+                              style: TextStyle(
+                                color: Colors.white,
+                                fontSize: 20,
+                              ),
                             ),
-                            Text('${weather.tempC.toString()} °C'),
-                            Text("${weather.windKph.toString()} Km/h"),
+                            const SizedBox(height: 10),
+                            Expanded(
+                              child: SizedBox(
+                                height: 250,
+
+                                child: LineChartWidgetTodayScreen(),
+                              ),
+                            ),
                           ],
                         ),
-                      );
-                    }),
-                ],
+                      ),
+                    ),
+                  ],
+                ),
+              );
+            }
+            return Center(
+              child: Text(
+                "No Data",
+                style: TextStyle(color: Colors.white, fontSize: 20),
               ),
-            ),
-          ),
+            );
+          }),
         ),
       ),
     );
