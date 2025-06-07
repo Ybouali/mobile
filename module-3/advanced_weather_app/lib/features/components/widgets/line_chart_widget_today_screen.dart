@@ -10,6 +10,9 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
   final weatherController = Get.put(WeatherController());
 
   List<FlSpot> getSpots() {
+    if (weatherController.weatherDay.value == null) {
+      return [];
+    }
     List<FlSpot> sp = weatherController.weatherDay.value!.map((dWeather) {
       return FlSpot(
         double.parse(
@@ -28,6 +31,7 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
 
   String getTimeLabel(double value) {
     final hour = value.toInt();
+    if (hour == 23) return "";
     return '${hour.toString().padLeft(2, '0')}:00';
   }
 
@@ -46,11 +50,10 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
               gradient: const LinearGradient(
                 colors: [Colors.red, Colors.redAccent, Colors.amberAccent],
               ),
-              barWidth: 4,
+              barWidth: 2,
               isCurved: true,
               preventCurveOverShooting: true,
               isStrokeCapRound: true,
-              // belowBarData: BarAreaData(show: true),
             ),
           ],
           titlesData: FlTitlesData(
@@ -85,8 +88,6 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
             topTitles: AxisTitles(),
             rightTitles: AxisTitles(),
           ),
-          gridData: FlGridData(show: true),
-          borderData: FlBorderData(show: true),
         ),
       ),
     );

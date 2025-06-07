@@ -1,4 +1,6 @@
+import 'package:advanced_weather_app/features/components/info_weather_day_by_hour.dart';
 import 'package:advanced_weather_app/features/components/widgets/line_chart_widget_today_screen.dart';
+import 'package:advanced_weather_app/features/models/weather_model.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:advanced_weather_app/features/components/custom_app_bar.dart';
@@ -11,6 +13,7 @@ class TodayScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final weatherController = Get.put(WeatherController());
+    final ScrollController scrollController = ScrollController();
 
     return Scaffold(
       backgroundColor: Colors.transparent,
@@ -39,6 +42,7 @@ class TodayScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 20),
 
+                    // Line Chart
                     Container(
                       height: 300,
                       width: 500,
@@ -63,6 +67,29 @@ class TodayScreen extends StatelessWidget {
                             ),
                           ),
                         ],
+                      ),
+                    ),
+                    const SizedBox(height: 20),
+                    // more info weather of a day
+                    Container(
+                      height: 150,
+                      decoration: BoxDecoration(
+                        color: Color.fromRGBO(95, 187, 233, 0.2),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: ListView.builder(
+                        controller: scrollController,
+                        scrollDirection: Axis.horizontal,
+                        itemCount: weatherController.weatherDay.value!.length,
+                        itemBuilder: (context, index) {
+                          if (weatherController.weatherDay.value != null) {
+                            final WeatherModel weather =
+                                weatherController.weatherDay.value![index];
+
+                            return InfoWeatherDayByHour(weather: weather);
+                          }
+                          return null;
+                        },
                       ),
                     ),
                   ],

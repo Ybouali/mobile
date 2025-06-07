@@ -51,7 +51,9 @@ class CurrentlyScreen extends StatelessWidget {
                     ),
                     const SizedBox(height: 10),
                     Lottie.asset(
-                      weatherController.getAnimationForCurrentWeather(),
+                      weatherController.getAnimationForCurrentWeather(
+                        weatherController.curr.value!.condition,
+                      ),
                       height: 200,
                       width: 200,
                     ),

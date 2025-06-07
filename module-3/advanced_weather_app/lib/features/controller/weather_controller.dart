@@ -273,15 +273,13 @@ class WeatherController extends GetxController {
     }
   }
 
-  String getAnimationForCurrentWeather() {
-    if (curr.value == null || curr.value!.condition.isEmpty) {
+  String getAnimationForCurrentWeather(String? weatherCondition) {
+    if (weatherCondition == null || weatherCondition.isEmpty) {
       return "assets/animations/weather/sunny.json";
     }
 
-    final String condition = curr.value!.condition.toLowerCase();
-    // debugPrint("Weather Condition: $condition");
+    final String condition = weatherCondition.toLowerCase();
 
-    // Rainy/Drizzly Conditions
     if (condition.contains("rain") ||
         condition.contains("drizzle") ||
         condition.contains("shower") ||
@@ -290,7 +288,6 @@ class WeatherController extends GetxController {
       return "assets/animations/weather/rain.json";
     }
 
-    // Snowy/Icy Conditions
     if (condition.contains("snow") ||
         condition.contains("blizzard") ||
         condition.contains("sleet") ||
@@ -299,26 +296,22 @@ class WeatherController extends GetxController {
       return "assets/animations/weather/snow.json";
     }
 
-    // Foggy/Misty Conditions
     if (condition.contains("mist") ||
         condition.contains("fog") ||
         condition.contains("haze")) {
       return "assets/animations/weather/cloud.json";
     }
 
-    // Cloudy Conditions
     if (condition.contains("cloud") || condition.contains("overcast")) {
       return "assets/animations/weather/cloud.json";
     }
 
-    // Clear/Sunny Conditions
     if (condition.contains("clear") ||
         condition.contains("sunny") ||
         condition.contains("fair")) {
       return "assets/animations/weather/sunny.json";
     }
 
-    // Extreme Weather (Fallback to storm animation)
     if (condition.contains("tornado") ||
         condition.contains("hurricane") ||
         condition.contains("sandstorm") ||
