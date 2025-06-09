@@ -89,7 +89,8 @@ class TodayScreen extends StatelessWidget {
                         child: ListView.builder(
                           controller: scrollController,
                           scrollDirection: Axis.horizontal,
-                          itemCount: weatherController.weatherDay.value!.length,
+                          itemCount:
+                              weatherController.weatherDay.value?.length ?? 0,
                           itemBuilder: (context, index) {
                             if (weatherController.weatherDay.value != null) {
                               final WeatherModel weather =
