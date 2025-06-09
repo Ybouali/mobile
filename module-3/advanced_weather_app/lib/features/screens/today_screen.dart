@@ -77,19 +77,29 @@ class TodayScreen extends StatelessWidget {
                         color: Color.fromRGBO(95, 187, 233, 0.2),
                         borderRadius: BorderRadius.circular(10),
                       ),
-                      child: ListView.builder(
+                      child: RawScrollbar(
                         controller: scrollController,
-                        scrollDirection: Axis.horizontal,
-                        itemCount: weatherController.weatherDay.value!.length,
-                        itemBuilder: (context, index) {
-                          if (weatherController.weatherDay.value != null) {
-                            final WeatherModel weather =
-                                weatherController.weatherDay.value![index];
+                        padding: const EdgeInsets.symmetric(),
+                        trackRadius: const Radius.circular(10),
+                        radius: const Radius.circular(10),
+                        trackVisibility: true,
+                        thumbColor: Colors.amber,
+                        thumbVisibility: true,
+                        interactive: true,
+                        child: ListView.builder(
+                          controller: scrollController,
+                          scrollDirection: Axis.horizontal,
+                          itemCount: weatherController.weatherDay.value!.length,
+                          itemBuilder: (context, index) {
+                            if (weatherController.weatherDay.value != null) {
+                              final WeatherModel weather =
+                                  weatherController.weatherDay.value![index];
 
-                            return InfoWeatherDayByHour(weather: weather);
-                          }
-                          return null;
-                        },
+                              return InfoWeatherDayByHour(weather: weather);
+                            }
+                            return null;
+                          },
+                        ),
                       ),
                     ),
                   ],
