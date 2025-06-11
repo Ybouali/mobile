@@ -11,30 +11,6 @@ class InfoWeatherDayByHour extends StatelessWidget {
   Widget build(BuildContext context) {
     final WeatherController weatherController = WeatherController();
 
-    IconData iconType() {
-      final String con = weatherController.getAnimationForCurrentWeather(
-        weather.condition,
-      );
-
-      final String getJsonCon = con.split("/").last;
-
-      final List<String> listSplit = getJsonCon.split(".");
-
-      final String getcon = listSplit[listSplit.length - 2];
-
-      if (getcon == "sunny") {
-        return Icons.wb_sunny_outlined;
-      } else if (getcon == "rain") {
-        return Icons.grain_outlined;
-      } else if (getcon == "snow") {
-        return Icons.ac_unit;
-      } else if (getcon == "cloud") {
-        return Icons.cloud;
-      }
-
-      return Icons.wb_sunny_outlined;
-    }
-
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 10),
       child: Column(
@@ -47,7 +23,11 @@ class InfoWeatherDayByHour extends StatelessWidget {
             style: TextStyle(color: Colors.white70, fontSize: 20),
           ),
           // icon weather
-          Icon(iconType(), size: 32, color: Colors.white),
+          Icon(
+            weatherController.getIconType(weather.condition),
+            size: 32,
+            color: Colors.white,
+          ),
           // temp
           Text(
             "${weather.tempC.toString()} °C",

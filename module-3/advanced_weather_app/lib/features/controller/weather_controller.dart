@@ -322,6 +322,28 @@ class WeatherController extends GetxController {
     return "assets/animations/weather/sunny.json";
   }
 
+  IconData getIconType(String? condition) {
+    final String con = getAnimationForCurrentWeather(condition);
+
+    final String getJsonCon = con.split("/").last;
+
+    final List<String> listSplit = getJsonCon.split(".");
+
+    final String getcon = listSplit[listSplit.length - 2];
+
+    if (getcon == "sunny") {
+      return Icons.wb_sunny_outlined;
+    } else if (getcon == "rain") {
+      return Icons.grain_outlined;
+    } else if (getcon == "snow") {
+      return Icons.ac_unit;
+    } else if (getcon == "cloud") {
+      return Icons.cloud;
+    }
+
+    return Icons.wb_sunny_outlined;
+  }
+
   Future<void> getTheDayWeather() async {
     try {
       final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
@@ -376,6 +398,7 @@ class WeatherController extends GetxController {
             minTempC: dayData['mintemp_c']?.toDouble() ?? 0.0,
             maxTempC: dayData['maxtemp_c']?.toDouble() ?? 0.0,
             description: dayData['condition']['text'] ?? 'No description',
+            condition: dayData['condition']['text'] ?? '',
           );
         }).toList();
       } else if (res.statusCode == 401) {
