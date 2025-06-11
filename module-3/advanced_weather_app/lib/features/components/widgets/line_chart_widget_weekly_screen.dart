@@ -32,6 +32,7 @@ class _LineChartWidgetWeeklyScreenState
       String formatedDate = DateFormat('dd/MM').format(date);
       return formatedDate;
     }).toList();
+
     return newDates;
   }
 
@@ -54,7 +55,7 @@ class _LineChartWidgetWeeklyScreenState
         .asMap()
         .entries
         .map((w) {
-          return FlSpot(w.key.toDouble(), w.value.maxTempC);
+          return FlSpot(w.key.toDouble() + 0.5, w.value.maxTempC);
         })
         .toList();
     return maxSp;
@@ -68,7 +69,7 @@ class _LineChartWidgetWeeklyScreenState
         .asMap()
         .entries
         .map((w) {
-          return FlSpot(w.key.toDouble(), w.value.minTempC);
+          return FlSpot(w.key.toDouble() + 0.5, w.value.minTempC);
         })
         .toList();
     return maxSp;
@@ -76,62 +77,71 @@ class _LineChartWidgetWeeklyScreenState
 
   @override
   Widget build(BuildContext context) {
-    return LineChart(
-      LineChartData(
-        minY: 0,
-        maxY: 40,
-        minX: 0,
-        maxX: 7,
-        lineBarsData: [
-          // max temp
-          LineChartBarData(
-            spots: getSpotMax(),
-            color: Colors.blueAccent,
-            barWidth: 2,
-            isCurved: true,
-            preventCurveOverShooting: true,
-            isStrokeCapRound: true,
-          ),
-          // min temp
-          LineChartBarData(
-            spots: getSpotMin(),
-            color: Colors.redAccent,
-            barWidth: 2,
-            isCurved: true,
-            preventCurveOverShooting: true,
-            isStrokeCapRound: true,
-          ),
-        ],
-        titlesData: FlTitlesData(
-          show: true,
-          bottomTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              interval: 1,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  _dates[value.toInt()],
-                  style: TextStyle(fontSize: 10, color: Colors.amber[50]),
-                );
-              },
+    return Obx(
+      () => LineChart(
+        LineChartData(
+          minY: 0,
+          maxY: 40,
+          minX: 0,
+          maxX: 7,
+          lineBarsData: [
+            // max temp
+            LineChartBarData(
+              spots: getSpotMax(),
+              color: Colors.redAccent,
+              barWidth: 2,
+              isCurved: true,
+              preventCurveOverShooting: true,
+              isStrokeCapRound: true,
             ),
-          ),
-          leftTitles: AxisTitles(
-            sideTitles: SideTitles(
-              showTitles: true,
-              reservedSize: 30,
-              interval: 5,
-              getTitlesWidget: (value, meta) {
-                return Text(
-                  getTemperatureLabel(value),
-                  style: TextStyle(fontSize: 10, color: Colors.amber[50]),
-                );
-              },
+            // min temp
+            LineChartBarData(
+              spots: getSpotMin(),
+              color: Colors.blueAccent,
+              barWidth: 2,
+              isCurved: true,
+              preventCurveOverShooting: true,
+              isStrokeCapRound: true,
             ),
+          ],
+          titlesData: FlTitlesData(
+            show: true,
+            bottomTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 30,
+                interval: 1,
+                getTitlesWidget: (value, meta) {
+                  int index = value.toInt().clamp(0, _dates.length - 1);
+                  if (index == _dates.length - 1) {
+                    return Text("");
+                  }
+                  return Transform.translate(
+                    offset: Offset(20, 0),
+                    child: Text(
+                      _dates[index],
+                      style: TextStyle(fontSize: 10, color: Colors.amber[50]),
+                    ),
+                  );
+                },
+              ),
+            ),
+            leftTitles: AxisTitles(
+              sideTitles: SideTitles(
+                showTitles: true,
+                reservedSize: 30,
+                interval: 5,
+                getTitlesWidget: (value, meta) {
+                  return Text(
+                    getTemperatureLabel(value),
+                    style: TextStyle(fontSize: 10, color: Colors.amber[50]),
+                  );
+                },
+              ),
+            ),
+            rightTitles: AxisTitles(),
+            topTitles: AxisTitles(),
           ),
-          rightTitles: AxisTitles(),
-          topTitles: AxisTitles(),
         ),
       ),
     );

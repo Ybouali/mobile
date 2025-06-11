@@ -65,26 +65,26 @@ class WeeklyScreen extends StatelessWidget {
                           children: [
                             Icon(
                               Icons.linear_scale_sharp,
-                              color: Colors.redAccent,
+                              color: Colors.blueAccent,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               "Min temperatures",
                               style: TextStyle(
-                                color: Colors.redAccent,
+                                color: Colors.blueAccent,
                                 fontSize: 14,
                               ),
                             ),
                             const SizedBox(width: 10),
                             Icon(
                               Icons.linear_scale_sharp,
-                              color: Colors.blueAccent,
+                              color: Colors.redAccent,
                             ),
                             const SizedBox(width: 5),
                             Text(
                               "Max temperatures",
                               style: TextStyle(
-                                color: Colors.blueAccent,
+                                color: Colors.redAccent,
                                 fontSize: 14,
                               ),
                             ),
