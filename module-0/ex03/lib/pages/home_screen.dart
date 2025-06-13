@@ -84,7 +84,7 @@ class _HomeScreenState extends State<HomeScreen> {
                           crossAxisCount:
                               orientation == Orientation.portrait ? 5 : 5,
                           childAspectRatio:
-                              orientation == Orientation.portrait ? 1 : 1.5,
+                              orientation == Orientation.portrait ? 1 : 5,
                           children:
                               keys.map((val) {
                                 return CustomeButton(
