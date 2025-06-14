@@ -3,8 +3,8 @@ import 'package:diary_app/features/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class OnBordingScreen extends StatelessWidget {
+  const OnBordingScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -40,15 +40,7 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {
-                  Get.to(() => WelcomeScreen());
-                  // final UserCredential? userCredential = await GoogleService()
-                  //     .signIn();
-
-                  // if (userCredential != null) {
-                  //   print('Signed in: ${userCredential.user?.displayName}');
-                  // }
-                },
+                onPressed: () => Get.to(() => WelcomeScreen()),
                 child: Text(
                   "Login",
                   style: TextStyle(
