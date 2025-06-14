@@ -1,6 +1,7 @@
 import 'package:diary_app/features/components/background.dart';
+import 'package:diary_app/features/screens/welcome_screen.dart';
 import 'package:flutter/material.dart';
-import 'package:google_fonts/google_fonts.dart';
+import 'package:get/get.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -16,16 +17,18 @@ class HomeScreen extends StatelessWidget {
             children: [
               Text(
                 "Welcome to your",
-                style: GoogleFonts.dancingScript(
+                style: TextStyle(
+                  fontFamily: "Tangerine",
                   fontSize: 40,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               Text(
                 "Diary",
-                style: GoogleFonts.dancingScript(
+                style: TextStyle(
+                  fontFamily: "Tangerine",
                   fontSize: 40,
-                  fontWeight: FontWeight.bold,
+                  fontWeight: FontWeight.w700,
                 ),
               ),
               const SizedBox(height: 10),
@@ -37,12 +40,21 @@ class HomeScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () {},
+                onPressed: () {
+                  Get.to(() => WelcomeScreen());
+                  // final UserCredential? userCredential = await GoogleService()
+                  //     .signIn();
+
+                  // if (userCredential != null) {
+                  //   print('Signed in: ${userCredential.user?.displayName}');
+                  // }
+                },
                 child: Text(
                   "Login",
-                  style: GoogleFonts.dancingScript(
+                  style: TextStyle(
+                    fontFamily: "Tangerine",
                     fontSize: 40,
-                    fontWeight: FontWeight.bold,
+                    fontWeight: FontWeight.w700,
                     color: Colors.white,
                   ),
                 ),
