@@ -1,4 +1,3 @@
-import 'package:diary_app/features/components/background.dart';
 import 'package:diary_app/features/controllers/nav_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -10,22 +9,23 @@ class BottomNavMenu extends StatelessWidget {
   Widget build(BuildContext context) {
     final NavController navController = Get.put(NavController());
     return Scaffold(
+      backgroundColor: Colors.grey.shade500,
       bottomNavigationBar: NavigationBar(
+        backgroundColor: Colors.grey.shade500,
         height: 80,
         elevation: 0,
         selectedIndex: navController.selectedIndex.value,
         onDestinationSelected: (value) =>
             navController.selectedIndex.value = value,
         destinations: [
-          NavigationDestination(icon: Icon(Icons.person), label: ''),
-          NavigationDestination(icon: Icon(Icons.calendar_month), label: ''),
+          NavigationDestination(icon: Icon(Icons.person, size: 32), label: ''),
+          NavigationDestination(
+            icon: Icon(Icons.calendar_month, size: 32),
+            label: '',
+          ),
         ],
       ),
-      body: Background(
-        child: Obx(
-          () => navController.screens[navController.selectedIndex.value],
-        ),
-      ),
+      body: Obx(() => navController.screens[navController.selectedIndex.value]),
     );
   }
 }

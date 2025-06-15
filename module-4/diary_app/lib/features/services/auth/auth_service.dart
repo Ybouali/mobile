@@ -7,7 +7,20 @@ class AuthService {
 
   // Get the current user
   Future<User?> getCurrentUser() async {
-    return _auth.currentUser;
+    try {
+      final User? user = _auth.currentUser;
+
+      if (user != null) {
+        // force refresh
+        await user.getIdToken(true);
+
+        return user;
+      }
+      return null;
+    } catch (e) {
+      debugPrint('Error verifying user: $e');
+      return null;
+    }
   }
 
   // Log OUT
