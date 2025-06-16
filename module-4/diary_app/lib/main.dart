@@ -10,6 +10,7 @@ import 'package:get/get_navigation/get_navigation.dart';
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
+  // await initializeDateFormatting("", "");
   final AuthService authService = AuthService();
 
   final User? user = await authService.getCurrentUser();

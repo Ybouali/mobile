@@ -73,8 +73,9 @@ void _addEntry(BuildContext context, EntryController entryController) {
                   color: Colors.white,
                 ),
               ),
-              onPressed: () {
-                Navigator.of(context).pop();
+              onPressed: () async {
+                await entryController.createEntry();
+                Get.back();
               },
             ),
           ],
@@ -85,6 +86,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
           mainAxisSize: MainAxisSize.min,
           children: [
             TextField(
+              controller: entryController.titleController,
               decoration: InputDecoration(
                 labelText: 'Title',
                 labelStyle: TextStyle(
@@ -118,7 +120,9 @@ void _addEntry(BuildContext context, EntryController entryController) {
               );
             }),
             SizedBox(height: 10),
+
             TextField(
+              controller: entryController.contentController,
               maxLines: 5,
               decoration: InputDecoration(
                 labelText: 'Text ...',

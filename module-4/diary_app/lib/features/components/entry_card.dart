@@ -1,12 +1,19 @@
+import 'package:diary_app/features/controllers/entry_controller.dart';
+import 'package:diary_app/features/models/entry_model.dart';
+import 'package:diary_app/utils/entry_utils_functions.dart';
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
+import 'package:get/get.dart';
 
 class EntryCard extends StatelessWidget {
   final VoidCallback? onTap;
-  const EntryCard({super.key, this.onTap});
+  final EntryModel entry;
+
+  const EntryCard({super.key, this.onTap, required this.entry});
 
   @override
   Widget build(BuildContext context) {
+    final (year, day) = EntryUtilsFunctions().getYearAndDay(entry.date!);
+    final EntryController entryController = Get.put(EntryController());
     return GestureDetector(
       onTap: onTap,
       child: Container(
@@ -21,7 +28,7 @@ class EntryCard extends StatelessWidget {
             Column(
               children: [
                 Text(
-                  "16",
+                  day,
                   style: TextStyle(
                     fontFamily: "Tangerine",
                     fontSize: 20,
@@ -29,7 +36,7 @@ class EntryCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "March",
+                  EntryUtilsFunctions().getNameOfMonth(entry.date!),
                   style: TextStyle(
                     fontFamily: "Tangerine",
                     fontSize: 20,
@@ -37,7 +44,7 @@ class EntryCard extends StatelessWidget {
                   ),
                 ),
                 Text(
-                  "2025",
+                  year,
                   style: TextStyle(
                     fontFamily: "Tangerine",
                     fontSize: 20,
@@ -53,9 +60,9 @@ class EntryCard extends StatelessWidget {
               children: [
                 // Emojie
                 Icon(
-                  Iconsax.emoji_normal,
+                  entryController.feelingIcons[entry.feeling],
                   size: 32,
-                  color: Colors.red.shade300,
+                  color: entryController.feelingColors[entry.feeling],
                 ),
                 const SizedBox(width: 20),
                 // Divider
@@ -63,13 +70,18 @@ class EntryCard extends StatelessWidget {
 
                 const SizedBox(width: 20),
 
-                // Tille number
-                Text(
-                  "Tittle 7",
-                  style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 50,
-                    fontWeight: FontWeight.w600,
+                // Tille
+                SizedBox(
+                  width: 100,
+                  child: Text(
+                    entry.title,
+                    style: TextStyle(
+                      fontFamily: "Tangerine",
+                      fontSize: 50,
+                      fontWeight: FontWeight.w600,
+                    ),
+                    overflow: TextOverflow.ellipsis,
+                    maxLines: 1,
                   ),
                 ),
               ],

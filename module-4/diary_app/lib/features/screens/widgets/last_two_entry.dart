@@ -1,4 +1,3 @@
-import 'package:diary_app/features/components/entry_card.dart';
 import 'package:diary_app/features/screens/list_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -28,9 +27,9 @@ class LastTwoEntry extends StatelessWidget {
                 fontWeight: FontWeight.w600,
               ),
             ),
-            EntryCard(onTap: null),
+            // EntryCard(onTap: null),
 
-            EntryCard(onTap: null),
+            // EntryCard(onTap: null),
           ],
         ),
       ),
