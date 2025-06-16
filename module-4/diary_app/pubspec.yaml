@@ -40,6 +40,7 @@ dependencies:
     get: ^4.7.2
     url_launcher: ^6.3.1
     iconsax: ^0.0.8
+    # cloud_firestore: ^5.6.9
 
 dev_dependencies:
     flutter_test:

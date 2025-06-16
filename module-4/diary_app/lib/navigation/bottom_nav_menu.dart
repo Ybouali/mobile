@@ -1,4 +1,4 @@
-import 'package:diary_app/features/controllers/nav_controller.dart';
+import 'package:diary_app/features/controllers/entry_controller.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -7,7 +7,7 @@ class BottomNavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final NavController navController = Get.put(NavController());
+    final EntryController navController = Get.put(EntryController());
     return Scaffold(
       backgroundColor: Colors.grey.shade500,
       bottomNavigationBar: NavigationBar(

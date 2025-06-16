@@ -1,3 +1,4 @@
+import 'package:diary_app/features/components/new_entry_button.dart';
 import 'package:diary_app/features/screens/widgets/header_profile.dart';
 import 'package:diary_app/features/screens/widgets/last_seven_entry.dart';
 import 'package:diary_app/features/screens/widgets/last_two_entry.dart';
@@ -23,31 +24,9 @@ class ProfileScreen extends StatelessWidget {
               SizedBox(height: 10),
               // Last 7 entries
               LastSevenEntry(),
-              SizedBox(height: 10),
+
               // Button for new Entry
-              ElevatedButton(
-                style: ElevatedButton.styleFrom(
-                  shape: BeveledRectangleBorder(
-                    borderRadius: BorderRadiusGeometry.circular(3),
-                  ),
-                  backgroundColor: Colors.green.shade400,
-                  padding: const EdgeInsets.symmetric(
-                    vertical: 5,
-                    horizontal: 20,
-                  ),
-                ),
-                onPressed: () {},
-                child: Text(
-                  "New diary entry",
-                  style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 35,
-                    fontWeight: FontWeight.w700,
-                    color: Colors.white70,
-                  ),
-                ),
-              ),
-              SizedBox(height: 10),
+              NewEntryButton(),
             ],
           ),
         ),
