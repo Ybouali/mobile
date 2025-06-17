@@ -60,9 +60,9 @@ class LastSevenEntry extends StatelessWidget {
 
                     final EntryModel entry = entryController.entryList[index];
                     return FeelCard(
-                      percent: entry.percent,
                       icon: entryController.feelingIcons[entry.feeling]!,
                       colorIcon: entryController.feelingColors[entry.feeling]!,
+                      feeling: entry.feeling,
                     );
                   },
                 ),

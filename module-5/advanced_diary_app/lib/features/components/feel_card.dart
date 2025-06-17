@@ -1,18 +1,23 @@
+import 'package:advanced_diary_app/features/controllers/entry_controller.dart';
+import 'package:advanced_diary_app/features/models/entry_model.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 
 class FeelCard extends StatelessWidget {
-  final int percent;
+  final Feeling feeling;
   final IconData icon;
   final Color colorIcon;
   const FeelCard({
     super.key,
-    required this.percent,
     required this.icon,
     required this.colorIcon,
+    required this.feeling,
   });
 
   @override
   Widget build(BuildContext context) {
+    final EntryController entryController = Get.put(EntryController());
+    final double percent = entryController.getFeelingPercentage(feeling);
     return Row(
       children: [
         const SizedBox(width: 5),

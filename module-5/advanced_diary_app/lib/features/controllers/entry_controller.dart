@@ -12,7 +12,6 @@ class EntryController extends GetxController {
   static EntryController get instance => Get.find();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
-  final TextEditingController percentController = TextEditingController();
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final AuthService _auth = AuthService();
 
@@ -113,16 +112,16 @@ class EntryController extends GetxController {
     try {
       final User? user = await _auth.getCurrentUser();
 
-      if (user != null) {
+      if (user != null &&
+          titleController.text.isNotEmpty &&
+          contentController.text.isNotEmpty) {
         final String userEmail = user.email!;
         final String title = titleController.text;
         final String content = contentController.text;
-        final int percent = int.parse(percentController.text);
 
         await _firebaseFirestore.collection("notes").add({
           'userEmail': userEmail,
           'created_at': FieldValue.serverTimestamp(),
-          'percent': percent,
           'title': title,
           'content': content,
           'feeling': selectedFeelingOnCreated.value.index,
@@ -133,5 +132,25 @@ class EntryController extends GetxController {
     } catch (e) {
       debugPrint(e.toString());
     }
+  }
+
+  // GET Percentage
+  double getFeelingPercentage(Feeling feelingToFind) {
+    final feelingCount = <Feeling, int>{};
+
+    final List<Feeling> allFeelings = [];
+
+    for (final ent in entryList) {
+      allFeelings.add(ent.feeling);
+    }
+
+    for (final feeling in allFeelings) {
+      feelingCount[feeling] = (feelingCount[feeling] ?? 0) + 1;
+    }
+
+    final count = feelingCount[feelingToFind];
+    if (count == null) return 0;
+
+    return (count / allFeelings.length) * 100;
   }
 }

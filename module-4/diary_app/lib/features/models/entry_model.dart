@@ -8,14 +8,12 @@ class EntryModel {
   final DateTime? date;
   final String title;
   final String content;
-  final int percent;
   final Feeling feeling;
 
   EntryModel({
     this.id,
     this.userEmail,
     this.date,
-    required this.percent,
     required this.title,
     required this.content,
     required this.feeling,
@@ -30,7 +28,6 @@ class EntryModel {
 
     return EntryModel(
       id: doc.id,
-      percent: int.parse(map['percent'].toString()),
       title: map['title'] ?? "",
       content: map['content'] ?? "",
       feeling: Feeling.values[map['feeling'] ?? 0],

@@ -49,7 +49,6 @@ class EntryPoupHelp {
                   await entryController.createEntry();
                   Get.back();
                   entryController.contentController.clear();
-                  entryController.percentController.clear();
                   entryController.titleController.clear();
                 },
               ),
@@ -95,19 +94,6 @@ class EntryPoupHelp {
                   ],
                 );
               }),
-              const SizedBox(height: 10),
-              TextField(
-                controller: entryController.percentController,
-                decoration: InputDecoration(
-                  labelText: 'Add a percent for feeling',
-                  labelStyle: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                  ),
-                  border: OutlineInputBorder(),
-                ),
-              ),
 
               const SizedBox(height: 10),
 
