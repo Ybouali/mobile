@@ -12,11 +12,13 @@ class EntryController extends GetxController {
   static EntryController get instance => Get.find();
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
+  final TextEditingController percentController = TextEditingController();
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
   final AuthService _auth = AuthService();
 
   final List<Widget> screens = [ProfileScreen(), EntryScreen()];
   final RxInt selectedIndex = 0.obs;
+
   final Rx<Feeling> selectedFeelingOnCreated = Feeling.happy.obs;
   final RxList<EntryModel> entryList = <EntryModel>[].obs;
   final Map<Feeling, IconData> feelingIcons = {
@@ -63,6 +65,7 @@ class EntryController extends GetxController {
 
   Future<void> getAllEntrybyEmail() async {
     try {
+      entryList.value = [];
       final User? user = await _auth.getCurrentUser();
 
       if (user != null) {
@@ -87,6 +90,7 @@ class EntryController extends GetxController {
       final User? user = await _auth.getCurrentUser();
       if (user != null && user.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
+        await getAllEntrybyEmail();
       }
     } catch (e) {
       debugPrint(e.toString());
@@ -113,17 +117,17 @@ class EntryController extends GetxController {
         final String userEmail = user.email!;
         final String title = titleController.text;
         final String content = contentController.text;
+        final int percent = int.parse(percentController.text);
 
         await _firebaseFirestore.collection("notes").add({
           'userEmail': userEmail,
           'created_at': FieldValue.serverTimestamp(),
+          'percent': percent,
           'title': title,
           'content': content,
           'feeling': selectedFeelingOnCreated.value.index,
         });
 
-        titleController.clear();
-        contentController.clear();
         await getAllEntrybyEmail();
       }
     } catch (e) {

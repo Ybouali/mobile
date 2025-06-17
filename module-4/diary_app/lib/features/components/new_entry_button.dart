@@ -76,6 +76,9 @@ void _addEntry(BuildContext context, EntryController entryController) {
               onPressed: () async {
                 await entryController.createEntry();
                 Get.back();
+                entryController.contentController.clear();
+                entryController.percentController.clear();
+                entryController.titleController.clear();
               },
             ),
           ],
@@ -88,7 +91,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
             TextField(
               controller: entryController.titleController,
               decoration: InputDecoration(
-                labelText: 'Title',
+                labelText: 'Add a title for your feeling !',
                 labelStyle: TextStyle(
                   fontFamily: 'Tangerine',
                   fontSize: 30,
@@ -119,13 +122,27 @@ void _addEntry(BuildContext context, EntryController entryController) {
                 ],
               );
             }),
-            SizedBox(height: 10),
+            const SizedBox(height: 10),
+            TextField(
+              controller: entryController.percentController,
+              decoration: InputDecoration(
+                labelText: 'Add a percent for feeling',
+                labelStyle: TextStyle(
+                  fontFamily: 'Tangerine',
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                ),
+                border: OutlineInputBorder(),
+              ),
+            ),
+
+            const SizedBox(height: 10),
 
             TextField(
               controller: entryController.contentController,
               maxLines: 5,
               decoration: InputDecoration(
-                labelText: 'Text ...',
+                labelText: 'Add a content for your feeling !',
                 labelStyle: TextStyle(
                   fontFamily: 'Tangerine',
                   fontSize: 30,

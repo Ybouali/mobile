@@ -1,18 +1,25 @@
 import 'package:flutter/material.dart';
-import 'package:iconsax/iconsax.dart';
 
 class FeelCard extends StatelessWidget {
-  const FeelCard({super.key});
+  final int percent;
+  final IconData icon;
+  final Color colorIcon;
+  const FeelCard({
+    super.key,
+    required this.percent,
+    required this.icon,
+    required this.colorIcon,
+  });
 
   @override
   Widget build(BuildContext context) {
     return Row(
       children: [
         const SizedBox(width: 5),
-        Icon(Iconsax.emoji_happy, size: 32, color: Colors.blueAccent),
+        Icon(icon, size: 32, color: colorIcon),
         const SizedBox(width: 30),
         Text(
-          "30 %",
+          "$percent %",
           style: TextStyle(
             fontFamily: "Tangerine",
             fontSize: 30,

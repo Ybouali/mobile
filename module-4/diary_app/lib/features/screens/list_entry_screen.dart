@@ -21,24 +21,24 @@ class ListEntryScreen extends StatelessWidget {
           icon: Icon(Icons.arrow_back, size: 32),
         ),
       ),
-      body: Obx(() {
-        if (entryController.entryList.isEmpty) {
-          return Center(
-            child: Text(
-              "NO ENTRY, Add one ",
-              style: TextStyle(
-                fontFamily: "Tangerine",
-                fontSize: 30,
-                fontWeight: FontWeight.w900,
-              ),
-            ),
-          );
-        }
+      body: SafeArea(
+        child: Column(
+          children: [
+            Obx(() {
+              if (entryController.entryList.isEmpty) {
+                return Center(
+                  child: Text(
+                    "No entry !, Try to add one !",
+                    style: TextStyle(
+                      fontFamily: "Tangerine",
+                      fontSize: 30,
+                      fontWeight: FontWeight.w900,
+                    ),
+                  ),
+                );
+              }
 
-        return SafeArea(
-          child: Column(
-            children: [
-              Expanded(
+              return Expanded(
                 child: Container(
                   padding: const EdgeInsets.only(right: 4, left: 4, bottom: 4),
                   margin: const EdgeInsets.only(right: 4, left: 4, bottom: 4),
@@ -66,7 +66,7 @@ class ListEntryScreen extends StatelessWidget {
                           itemBuilder: (context, index) {
                             final EntryModel entryModel =
                                 entryController.entryList[index];
-                            print(entryModel.date);
+
                             return EntryCard(
                               onTap: () => _showMoreInfoOfFeeling(
                                 context,
@@ -81,12 +81,12 @@ class ListEntryScreen extends StatelessWidget {
                     ],
                   ),
                 ),
-              ),
-              NewEntryButton(),
-            ],
-          ),
-        );
-      }),
+              );
+            }),
+            NewEntryButton(),
+          ],
+        ),
+      ),
     );
   }
 }
@@ -162,32 +162,38 @@ void _showMoreInfoOfFeeling(
             children: [
               Divider(color: Colors.black),
               SizedBox(height: 5),
-              Obx(() {
-                final currentFeeling = entryController.selectedFeelingOnCreated;
-                return Row(
-                  children: [
-                    Text(
-                      "My Feeling : ",
-                      style: TextStyle(
-                        fontFamily: 'Tangerine',
-                        fontSize: 30,
-                        fontWeight: FontWeight.w700,
-                      ),
+              Text(
+                entryModel.title,
+                style: TextStyle(
+                  fontFamily: 'Tangerine',
+                  fontSize: 30,
+                  fontWeight: FontWeight.w700,
+                ),
+              ),
+              Divider(color: Colors.black),
+              SizedBox(height: 5),
+              Row(
+                children: [
+                  Text(
+                    "My Feeling : ",
+                    style: TextStyle(
+                      fontFamily: 'Tangerine',
+                      fontSize: 30,
+                      fontWeight: FontWeight.w700,
                     ),
-                    const SizedBox(width: 10),
-                    Icon(
-                      entryController.feelingIcons[currentFeeling.value],
-                      size: 40,
-                      color:
-                          entryController.feelingColors[currentFeeling.value],
-                    ),
-                  ],
-                );
-              }),
+                  ),
+                  const SizedBox(width: 10),
+                  Icon(
+                    entryController.feelingIcons[entryModel.feeling],
+                    size: 40,
+                    color: entryController.feelingColors[entryModel.feeling],
+                  ),
+                ],
+              ),
               Divider(color: Colors.black),
               SizedBox(height: 10),
               Text(
-                "is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. It has survived not only five centuries, but also the leap into electronic typesetting, remaining essentially unchanged. It was popularised in the 1960s with the release of Letraset sheets containing Lorem Ipsum passages, and more recently with desktop publishing software like Aldus PageMaker including versions of Lorem Ipsum.",
+                entryModel.content,
                 style: TextStyle(
                   fontFamily: 'Tangerine',
                   fontSize: 30,

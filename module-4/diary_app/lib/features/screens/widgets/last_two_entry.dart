@@ -1,3 +1,5 @@
+import 'package:diary_app/features/components/entry_card.dart';
+import 'package:diary_app/features/controllers/entry_controller.dart';
 import 'package:diary_app/features/screens/list_entry_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
@@ -7,6 +9,7 @@ class LastTwoEntry extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EntryController entryController = Get.put(EntryController());
     return GestureDetector(
       onTap: () => Get.to(() => ListEntryScreen()),
       child: Container(
@@ -17,21 +20,38 @@ class LastTwoEntry extends StatelessWidget {
           borderRadius: BorderRadius.circular(10),
         ),
         width: double.infinity,
-        child: Column(
-          children: [
-            Text(
-              "Your last diary entries",
-              style: TextStyle(
-                fontFamily: "Tangerine",
-                fontSize: 30,
-                fontWeight: FontWeight.w600,
+        child: Obx(() {
+          if (entryController.entryList.isEmpty) {
+            return Center(
+              child: Text(
+                "No Entry ! Try to add one .",
+                style: TextStyle(
+                  fontFamily: "Tangerine",
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
-            ),
-            // EntryCard(onTap: null),
+            );
+          }
+          return Column(
+            children: [
+              Text(
+                "Your last diary entries",
+                style: TextStyle(
+                  fontFamily: "Tangerine",
+                  fontSize: 30,
+                  fontWeight: FontWeight.w600,
+                ),
+              ),
 
-            // EntryCard(onTap: null),
-          ],
-        ),
+              if (entryController.entryList.isNotEmpty)
+                EntryCard(onTap: null, entry: entryController.entryList[0]),
+
+              if (entryController.entryList.length >= 2)
+                EntryCard(onTap: null, entry: entryController.entryList[1]),
+            ],
+          );
+        }),
       ),
     );
   }
