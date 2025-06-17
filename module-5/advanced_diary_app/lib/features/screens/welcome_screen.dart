@@ -28,20 +28,12 @@ class WelcomeScreen extends StatelessWidget {
             // Text Welcome
             Text(
               "Welcome",
-              style: TextStyle(
-                fontFamily: "Tangerine",
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 10),
             Text(
               "Login with google Or github",
-              style: TextStyle(
-                fontFamily: "Tangerine",
-                fontSize: 30,
-                fontWeight: FontWeight.w700,
-              ),
+              style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
             ),
             SizedBox(height: 10),
             OutlinedButton(
@@ -67,11 +59,7 @@ class WelcomeScreen extends StatelessWidget {
                   // Text
                   Text(
                     "Continue with Google",
-                    style: TextStyle(
-                      fontFamily: "Tangerine",
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),
@@ -92,11 +80,7 @@ class WelcomeScreen extends StatelessWidget {
                   // Text
                   Text(
                     "Continue with Github",
-                    style: TextStyle(
-                      fontFamily: "Tangerine",
-                      fontSize: 30,
-                      fontWeight: FontWeight.w400,
-                    ),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w400),
                   ),
                 ],
               ),

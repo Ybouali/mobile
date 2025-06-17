@@ -29,11 +29,7 @@ class ListEntryScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     "No entry !, Try to add one !",
-                    style: TextStyle(
-                      fontFamily: "Tangerine",
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
-                    ),
+                    style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
                   ),
                 );
               }
@@ -53,7 +49,6 @@ class ListEntryScreen extends StatelessWidget {
                       Text(
                         "Your last diary entries",
                         style: TextStyle(
-                          fontFamily: "Tangerine",
                           fontSize: 30,
                           fontWeight: FontWeight.w600,
                         ),

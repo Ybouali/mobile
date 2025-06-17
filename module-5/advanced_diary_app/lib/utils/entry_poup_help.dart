@@ -11,11 +11,7 @@ class EntryPoupHelp {
       builder: (BuildContext context) => AlertDialog(
         title: Text(
           "Add an Entry",
-          style: TextStyle(
-            fontFamily: "Tangerine",
-            fontSize: 20,
-            fontWeight: FontWeight.w500,
-          ),
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
         ),
         actions: [
           Row(

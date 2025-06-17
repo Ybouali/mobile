@@ -67,7 +67,9 @@ class EntryController extends GetxController {
       entryList.value = [];
       final User? user = await _auth.getCurrentUser();
 
-      if (user != null) {
+      if (user != null &&
+          titleController.text.isNotEmpty &&
+          contentController.text.isNotEmpty) {
         final String useremail = user.email!;
         final snapshot = await _firebaseFirestore
             .collection("notes")

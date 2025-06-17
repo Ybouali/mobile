@@ -23,7 +23,6 @@ class NewEntryButton extends StatelessWidget {
         child: Text(
           "New diary entry",
           style: TextStyle(
-            fontFamily: "Tangerine",
             fontSize: 35,
             fontWeight: FontWeight.w700,
             color: Colors.white70,

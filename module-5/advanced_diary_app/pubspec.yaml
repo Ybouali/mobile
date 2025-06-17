@@ -30,6 +30,7 @@ dependencies:
     iconsax: ^0.0.8
     cloud_firestore: ^5.6.9
     intl: ^0.20.2
+    table_calendar: ^3.2.0
 
 dev_dependencies:
     flutter_test:

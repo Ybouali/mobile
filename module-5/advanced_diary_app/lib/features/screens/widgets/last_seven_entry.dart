@@ -22,22 +22,14 @@ class LastSevenEntry extends StatelessWidget {
         children: [
           Text(
             "Your feel for your 7 entries",
-            style: TextStyle(
-              fontFamily: "Tangerine",
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
           ),
           Obx(() {
             if (entryController.entryList.isEmpty) {
               return Center(
                 child: Text(
                   "No Entry ! Try to add one .",
-                  style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 30,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
                 ),
               );
             }

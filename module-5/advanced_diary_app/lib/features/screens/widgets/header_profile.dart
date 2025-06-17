@@ -12,7 +12,6 @@ class HeaderProfile extends StatelessWidget {
       padding: EdgeInsets.symmetric(horizontal: 8),
       width: double.infinity,
       height: 170,
-      // color: Colors.amber,
       decoration: BoxDecoration(
         image: DecorationImage(
           image: AssetImage("assets/bacgound_flowers.jpg"),
@@ -46,17 +45,12 @@ class HeaderProfile extends StatelessWidget {
             children: [
               Text(
                 "Yassine Bouali",
-                style: TextStyle(
-                  fontFamily: "Tangerine",
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
+                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
               ),
               // Text email
               Text(
                 "yassine.bouali.bo@gmail.com",
                 style: TextStyle(
-                  fontFamily: "Tangerine",
                   fontSize: 23,
                   fontWeight: FontWeight.w600,
                   color: Colors.black87,

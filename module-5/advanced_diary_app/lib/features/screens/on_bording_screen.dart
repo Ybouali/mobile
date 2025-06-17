@@ -17,19 +17,11 @@ class OnBordingScreen extends StatelessWidget {
             children: [
               Text(
                 "Welcome to your",
-                style: TextStyle(
-                  fontFamily: "Tangerine",
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
               ),
               Text(
                 "Diary",
-                style: TextStyle(
-                  fontFamily: "Tangerine",
-                  fontSize: 40,
-                  fontWeight: FontWeight.w700,
-                ),
+                style: TextStyle(fontSize: 40, fontWeight: FontWeight.w700),
               ),
               const SizedBox(height: 10),
               ElevatedButton(
@@ -44,7 +36,6 @@ class OnBordingScreen extends StatelessWidget {
                 child: Text(
                   "Login",
                   style: TextStyle(
-                    fontFamily: "Tangerine",
                     fontSize: 40,
                     fontWeight: FontWeight.w700,
                     color: Colors.white,

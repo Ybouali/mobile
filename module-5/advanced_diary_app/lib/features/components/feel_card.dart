@@ -25,11 +25,7 @@ class FeelCard extends StatelessWidget {
         const SizedBox(width: 30),
         Text(
           "$percent %",
-          style: TextStyle(
-            fontFamily: "Tangerine",
-            fontSize: 30,
-            fontWeight: FontWeight.w700,
-          ),
+          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
         ),
       ],
     );
