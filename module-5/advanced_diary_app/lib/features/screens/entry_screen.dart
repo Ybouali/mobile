@@ -1,4 +1,6 @@
+import 'package:advanced_diary_app/features/controllers/entry_controller.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:table_calendar/table_calendar.dart';
 
 class EntryScreen extends StatefulWidget {
@@ -61,11 +63,13 @@ class _EntryScreenState extends State<EntryScreen> {
   }
 
   void _onDaySelected(DateTime selectedDay, DateTime focusedDay) {
+    final EntryController entryController = Get.put(EntryController());
     if (!isSameDay(selectedDay, _selectedDay)) {
       setState(() {
         _selectedDay = selectedDay;
         _focusedDay = focusedDay;
       });
+      entryController.getAllEntrybyEmailAndFixedTime(selectedDay);
     }
   }
 

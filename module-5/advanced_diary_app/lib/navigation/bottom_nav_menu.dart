@@ -7,16 +7,16 @@ class BottomNavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EntryController navController = Get.put(EntryController());
+    final EntryController entryController = Get.put(EntryController());
     return Scaffold(
       backgroundColor: Colors.grey.shade500,
       bottomNavigationBar: NavigationBar(
         backgroundColor: Colors.grey.shade500,
         height: 80,
         elevation: 0,
-        selectedIndex: navController.selectedIndex.value,
+        selectedIndex: entryController.selectedIndex.value,
         onDestinationSelected: (value) =>
-            navController.selectedIndex.value = value,
+            entryController.selectedIndex.value = value,
         destinations: [
           NavigationDestination(icon: Icon(Icons.person, size: 32), label: ''),
           NavigationDestination(
@@ -25,7 +25,13 @@ class BottomNavMenu extends StatelessWidget {
           ),
         ],
       ),
-      body: Obx(() => navController.screens[navController.selectedIndex.value]),
+      body: Obx(() {
+        if (entryController.selectedIndex.value == 0) {
+          entryController.getAllEntrybyEmail();
+        }
+
+        return entryController.screens[entryController.selectedIndex.value];
+      }),
     );
   }
 }

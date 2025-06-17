@@ -20,6 +20,7 @@ class EntryController extends GetxController {
 
   final Rx<Feeling> selectedFeelingOnCreated = Feeling.happy.obs;
   final RxList<EntryModel> entryList = <EntryModel>[].obs;
+  final RxList<EntryModel> entryListByTime = <EntryModel>[].obs;
   User? user;
   final Map<Feeling, IconData> feelingIcons = {
     Feeling.happy: Iconsax.emoji_happy,
@@ -88,6 +89,30 @@ class EntryController extends GetxController {
     }
   }
 
+  Future<void> getAllEntrybyEmailAndFixedTime(DateTime timestamp) async {
+    try {
+      entryList.value = [];
+      //! TODO: this method not done yet ??
+      // print(Timestamp.fromDate(timestamp));
+
+      if (user != null) {
+        final String useremail = user!.email!;
+        final snapshot = await _firebaseFirestore
+            .collection("notes")
+            .where("userEmail", isEqualTo: useremail)
+            .where("created_at", isEqualTo: Timestamp.fromDate(timestamp))
+            .get();
+
+        entryListByTime.assignAll(
+          snapshot.docs.map((doc) => EntryModel.fromFirestore(doc)).toList(),
+        );
+        debugPrint(entryListByTime.length.toString());
+      }
+    } catch (e) {
+      debugPrint(e.toString());
+    }
+  }
+
   Future<void> deleteEntry(String userEmail, String entryId) async {
     try {
       if (user != null && user!.email == userEmail) {
@@ -110,7 +135,7 @@ class EntryController extends GetxController {
 
         await _firebaseFirestore.collection("notes").add({
           'userEmail': userEmail,
-          'created_at': FieldValue.serverTimestamp(),
+          'created_at': Timestamp.now(),
           'title': title,
           'content': content,
           'feeling': selectedFeelingOnCreated.value.index,
