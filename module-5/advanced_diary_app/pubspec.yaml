@@ -74,10 +74,10 @@ flutter:
     fonts:
         - family: Tangerine
           fonts:
-              - asset: assets/fonts/Tangerine-Regular.ttf
-                weight: 400
-              - asset: assets/fonts/Tangerine-Bold.ttf
-                weight: 700
+              - asset: assets/fonts/PinyonScript-Regular.ttf
+                # weight: 400
+              #   - asset: assets/fonts/Tangerine-Bold.ttf
+              #     weight: 700
     #   - family: Trajan Pro
     #     fonts:
     #       - asset: fonts/TrajanPro.ttf

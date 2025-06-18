@@ -117,6 +117,7 @@ class EntryPoupHelp {
     BuildContext context,
     EntryController entryController,
     EntryModel entryModel,
+    DateTime? timestamp,
   ) {
     showDialog(
       context: context,
@@ -173,6 +174,7 @@ class EntryPoupHelp {
                     await entryController.deleteEntry(
                       entryModel.userEmail!,
                       entryModel.id!,
+                      timestamp,
                     );
                     Get.back();
                   },

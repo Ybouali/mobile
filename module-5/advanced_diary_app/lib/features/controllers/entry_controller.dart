@@ -90,34 +90,34 @@ class EntryController extends GetxController {
   }
 
   Future<void> getAllEntrybyEmailAndFixedTime(DateTime timestamp) async {
-    try {
-      entryList.value = [];
-      //! TODO: this method not done yet ??
-      // print(Timestamp.fromDate(timestamp));
+    await getAllEntrybyEmail();
 
-      if (user != null) {
-        final String useremail = user!.email!;
-        final snapshot = await _firebaseFirestore
-            .collection("notes")
-            .where("userEmail", isEqualTo: useremail)
-            .where("created_at", isEqualTo: Timestamp.fromDate(timestamp))
-            .get();
-
-        entryListByTime.assignAll(
-          snapshot.docs.map((doc) => EntryModel.fromFirestore(doc)).toList(),
-        );
-        debugPrint(entryListByTime.length.toString());
-      }
-    } catch (e) {
-      debugPrint(e.toString());
-    }
+    entryListByTime.value = [];
+    entryListByTime.assignAll(
+      entryList
+          .where(
+            (ent) =>
+                ent.date!.year == timestamp.year &&
+                ent.date!.month == timestamp.month &&
+                ent.date!.day == timestamp.day,
+          )
+          .toList(),
+    );
   }
 
-  Future<void> deleteEntry(String userEmail, String entryId) async {
+  Future<void> deleteEntry(
+    String userEmail,
+    String entryId,
+    DateTime? timestamp,
+  ) async {
     try {
       if (user != null && user!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
-        await getAllEntrybyEmail();
+        if (timestamp == null) {
+          await getAllEntrybyEmail();
+        } else {
+          await getAllEntrybyEmailAndFixedTime(timestamp);
+        }
       }
     } catch (e) {
       debugPrint(e.toString());

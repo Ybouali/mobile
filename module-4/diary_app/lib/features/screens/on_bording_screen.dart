@@ -1,5 +1,6 @@
 import 'package:diary_app/features/components/background.dart';
-import 'package:diary_app/features/screens/welcome_screen.dart';
+import 'package:diary_app/features/services/auth/auth_service.dart';
+import 'package:diary_app/navigation/bottom_nav_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -40,7 +41,10 @@ class OnBordingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () => Get.to(() => WelcomeScreen()),
+                onPressed: () async {
+                  await AuthService().login();
+                  Get.to(() => BottomNavMenu());
+                },
                 child: Text(
                   "Login",
                   style: TextStyle(

@@ -68,6 +68,7 @@ class ListEntryScreen extends StatelessWidget {
                                     context,
                                     entryController,
                                     entryModel,
+                                    null,
                                   ),
                               entry: entryModel,
                             );

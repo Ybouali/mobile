@@ -36,12 +36,12 @@ dependencies:
     cupertino_icons: ^1.0.8
     firebase_core: ^3.14.0
     firebase_auth: ^5.6.0
-    google_sign_in: ^6.3.0
     get: ^4.7.2
-    url_launcher: ^6.3.1
     iconsax: ^0.0.8
     cloud_firestore: ^5.6.9
     intl: ^0.20.2
+    auth0_flutter: ^1.11.0
+    flutter_dotenv: ^5.2.1
 
 dev_dependencies:
     flutter_test:

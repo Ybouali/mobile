@@ -1,9 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:diary_app/features/models/entry_model.dart';
+import 'package:diary_app/features/models/user_model.dart';
 import 'package:diary_app/features/screens/entry_screen.dart';
 import 'package:diary_app/features/screens/profile_screen.dart';
-import 'package:diary_app/features/services/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
@@ -13,10 +12,11 @@ class EntryController extends GetxController {
   final TextEditingController titleController = TextEditingController();
   final TextEditingController contentController = TextEditingController();
   final FirebaseFirestore _firebaseFirestore = FirebaseFirestore.instance;
-  final AuthService _auth = AuthService();
 
   final List<Widget> screens = [ProfileScreen(), EntryScreen()];
   final RxInt selectedIndex = 0.obs;
+
+  final Rx<UserModel?> user = null.obs;
 
   final Rx<Feeling> selectedFeelingOnCreated = Feeling.happy.obs;
   final RxList<EntryModel> entryList = <EntryModel>[].obs;
@@ -43,7 +43,7 @@ class EntryController extends GetxController {
   };
 
   @override
-  void onInit() {
+  void onInit() async {
     getAllEntrybyEmail();
     super.onInit();
   }
@@ -65,12 +65,11 @@ class EntryController extends GetxController {
   Future<void> getAllEntrybyEmail() async {
     try {
       entryList.value = [];
-      final User? user = await _auth.getCurrentUser();
 
-      if (user != null &&
+      if (user.value != null &&
           titleController.text.isNotEmpty &&
           contentController.text.isNotEmpty) {
-        final String useremail = user.email!;
+        final String useremail = user.value!.email;
         final snapshot = await _firebaseFirestore
             .collection("notes")
             .where("userEmail", isEqualTo: useremail)
@@ -88,8 +87,7 @@ class EntryController extends GetxController {
 
   Future<void> deleteEntry(String userEmail, String entryId) async {
     try {
-      final User? user = await _auth.getCurrentUser();
-      if (user != null && user.email == userEmail) {
+      if (user.value != null && user.value!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
         await getAllEntrybyEmail();
       }
@@ -98,24 +96,10 @@ class EntryController extends GetxController {
     }
   }
 
-  // Future<void> updateEntry(EntryModel newEntry, String idEntry) async {
-  //   try {
-  //     final User? user = await _auth.getCurrentUser();
-  //     if (user != null && user.email == newEntry.userEmail) {
-
-  //     }
-
-  //   } catch (e) {
-  //     debugPrint(e.toString());
-  //   }
-  // }
-
   Future<void> createEntry() async {
     try {
-      final User? user = await _auth.getCurrentUser();
-
-      if (user != null) {
-        final String userEmail = user.email!;
+      if (user.value != null) {
+        final String userEmail = user.value!.email;
         final String title = titleController.text;
         final String content = contentController.text;
 

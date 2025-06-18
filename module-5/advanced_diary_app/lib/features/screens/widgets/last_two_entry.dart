@@ -25,7 +25,7 @@ class LastTwoEntry extends StatelessWidget {
             return Center(
               child: Text(
                 "No Entry ! Try to add one .",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
             );
           }
@@ -33,7 +33,7 @@ class LastTwoEntry extends StatelessWidget {
             children: [
               Text(
                 "Your last diary entries",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w600),
+                style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
               ),
 
               if (entryController.entryList.isNotEmpty)

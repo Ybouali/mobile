@@ -45,15 +45,15 @@ class HeaderProfile extends StatelessWidget {
             children: [
               Text(
                 "Yassine Bouali",
-                style: TextStyle(fontSize: 30, fontWeight: FontWeight.w900),
+
+                style: TextStyle(fontWeight: FontWeight.w700, fontSize: 30),
               ),
               // Text email
               Text(
                 "yassine.bouali.bo@gmail.com",
                 style: TextStyle(
-                  fontSize: 23,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Colors.black45,
                 ),
               ),
             ],
