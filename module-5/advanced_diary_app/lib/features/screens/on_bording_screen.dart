@@ -1,5 +1,7 @@
 import 'package:advanced_diary_app/features/components/background.dart';
-import 'package:advanced_diary_app/features/screens/welcome_screen.dart';
+import 'package:advanced_diary_app/features/controllers/entry_controller.dart';
+import 'package:advanced_diary_app/features/services/auth/auth_service.dart';
+import 'package:advanced_diary_app/navigation/bottom_nav_menu.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 
@@ -8,6 +10,7 @@ class OnBordingScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EntryController entryController = Get.put(EntryController());
     return Scaffold(
       body: Background(
         child: Center(
@@ -32,7 +35,13 @@ class OnBordingScreen extends StatelessWidget {
                     borderRadius: BorderRadius.circular(10),
                   ),
                 ),
-                onPressed: () => Get.to(() => WelcomeScreen()),
+                onPressed: () async {
+                  await AuthService().login();
+                  if (entryController.user.value != null &&
+                      entryController.user.value!.checkExp()) {
+                    Get.to(() => BottomNavMenu());
+                  }
+                },
                 child: Text(
                   "Login",
                   style: TextStyle(

@@ -1,11 +1,10 @@
-import 'package:advanced_diary_app/features/screens/on_bording_screen.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:advanced_diary_app/features/models/entry_model.dart';
+import 'package:advanced_diary_app/features/models/user_model.dart';
 import 'package:advanced_diary_app/features/screens/entry_screen.dart';
 import 'package:advanced_diary_app/features/screens/profile_screen.dart';
-import 'package:advanced_diary_app/features/services/auth/auth_service.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -17,11 +16,12 @@ class EntryController extends GetxController {
 
   final List<Widget> screens = [ProfileScreen(), EntryScreen()];
   final RxInt selectedIndex = 0.obs;
+  final Rx<UserModel?> user = UserModel.empty().obs;
 
   final Rx<Feeling> selectedFeelingOnCreated = Feeling.happy.obs;
   final RxList<EntryModel> entryList = <EntryModel>[].obs;
   final RxList<EntryModel> entryListByTime = <EntryModel>[].obs;
-  User? user;
+
   final Map<Feeling, IconData> feelingIcons = {
     Feeling.happy: Iconsax.emoji_happy,
     Feeling.sad: Iconsax.emoji_sad,
@@ -46,12 +46,29 @@ class EntryController extends GetxController {
 
   @override
   void onInit() async {
-    user = await AuthService().getCurrentUser();
-    if (user == null) {
-      Get.offAll(() => OnBordingScreen());
-    }
-    getAllEntrybyEmail();
+    await initUserIfIsOnStorage();
+    await getAllEntrybyEmail();
     super.onInit();
+  }
+
+  Future<void> initUserIfIsOnStorage() async {
+    final storage = FlutterSecureStorage();
+
+    final String? email = await storage.read(key: "email");
+    final String? name = await storage.read(key: "name");
+    final String? expiresAt = await storage.read(key: "expiresAt");
+
+    if (email!.isNotEmpty && name!.isNotEmpty && expiresAt!.isNotEmpty) {
+      UserModel oldUser = UserModel(
+        email: email,
+        name: name,
+        expiresAt: DateTime.parse(expiresAt),
+      );
+      user.value = UserModel.empty();
+      if (oldUser.checkExp()) {
+        user.value = oldUser;
+      }
+    }
   }
 
   void nextFeeling() {
@@ -72,8 +89,8 @@ class EntryController extends GetxController {
     try {
       entryList.value = [];
 
-      if (user != null) {
-        final String useremail = user!.email!;
+      if (user.value!.email.isNotEmpty && user.value!.checkExp()) {
+        final String useremail = user.value!.email;
         final snapshot = await _firebaseFirestore
             .collection("notes")
             .where("userEmail", isEqualTo: useremail)
@@ -111,7 +128,7 @@ class EntryController extends GetxController {
     DateTime? timestamp,
   ) async {
     try {
-      if (user != null && user!.email == userEmail) {
+      if (user.value!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
         if (timestamp == null) {
           await getAllEntrybyEmail();
@@ -126,10 +143,9 @@ class EntryController extends GetxController {
 
   Future<void> createEntry() async {
     try {
-      if (user != null &&
-          titleController.text.isNotEmpty &&
+      if (titleController.text.isNotEmpty &&
           contentController.text.isNotEmpty) {
-        final String userEmail = user!.email!;
+        final String userEmail = user.value!.email;
         final String title = titleController.text;
         final String content = contentController.text;
 
@@ -149,7 +165,7 @@ class EntryController extends GetxController {
   }
 
   // GET Percentage
-  double getFeelingPercentage(Feeling feelingToFind) {
+  String getFeelingPercentage(Feeling feelingToFind) {
     final feelingCount = <Feeling, int>{};
 
     final List<Feeling> allFeelings = [];
@@ -163,8 +179,10 @@ class EntryController extends GetxController {
     }
 
     final count = feelingCount[feelingToFind];
-    if (count == null) return 0;
+    if (count == null) return "";
 
-    return (count / allFeelings.length) * 100;
+    final String res = ((count / allFeelings.length) * 100).toStringAsFixed(2);
+
+    return res;
   }
 }

@@ -46,7 +46,7 @@ class EntryController extends GetxController {
   @override
   void onInit() async {
     await initUserIfIsOnStorage();
-    getAllEntrybyEmail();
+    await getAllEntrybyEmail();
     super.onInit();
   }
 
@@ -63,10 +63,10 @@ class EntryController extends GetxController {
         name: name,
         expiresAt: DateTime.parse(expiresAt),
       );
+      user.value = UserModel.empty();
       if (oldUser.checkExp()) {
         user.value = oldUser;
       }
-      user.value = UserModel.empty();
     }
   }
 
@@ -88,8 +88,7 @@ class EntryController extends GetxController {
     try {
       entryList.value = [];
 
-      if (titleController.text.isNotEmpty &&
-          contentController.text.isNotEmpty) {
+      if (user.value!.email.isNotEmpty && user.value!.checkExp()) {
         final String useremail = user.value!.email;
         final snapshot = await _firebaseFirestore
             .collection("notes")
@@ -122,6 +121,10 @@ class EntryController extends GetxController {
       final String userEmail = user.value!.email;
       final String title = titleController.text;
       final String content = contentController.text;
+
+      if (content.isEmpty || userEmail.isEmpty || title.isEmpty) {
+        return;
+      }
 
       await _firebaseFirestore.collection("notes").add({
         'userEmail': userEmail,

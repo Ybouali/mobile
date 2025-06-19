@@ -30,30 +30,29 @@ class _EntryScreenState extends State<EntryScreen> {
                 daysOfWeekHeight: 60,
                 daysOfWeekStyle: DaysOfWeekStyle(
                   weekdayStyle: TextStyle(
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.w300,
                   ),
                   weekendStyle: TextStyle(
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.w300,
                   ),
                 ),
                 headerStyle: const HeaderStyle(
                   formatButtonTextStyle: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 25,
+                    fontSize: 18,
                     fontWeight: FontWeight.w300,
                     color: Colors.black,
                   ),
                   titleTextStyle: TextStyle(
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.w500,
                     color: Colors.blue,
                   ),
                 ),
                 calendarStyle: CalendarStyle(
-                  defaultTextStyle: TextStyle(fontSize: 30),
-                  weekendTextStyle: TextStyle(fontSize: 30),
+                  defaultTextStyle: TextStyle(fontSize: 18),
+                  weekendTextStyle: TextStyle(fontSize: 18),
                 ),
                 firstDay: DateTime.utc(2024, 01, 01),
                 lastDay: DateTime.utc(2040, 01, 01),
@@ -69,7 +68,7 @@ class _EntryScreenState extends State<EntryScreen> {
                     child: Text(
                       "No Entry For this day",
                       style: TextStyle(
-                        fontSize: 30,
+                        fontSize: 22,
                         fontWeight: FontWeight.w600,
                       ),
                     ),

@@ -11,7 +11,7 @@ class EntryPoupHelp {
       builder: (BuildContext context) => AlertDialog(
         title: Text(
           "Add an Entry",
-          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w500),
+          style: TextStyle(fontSize: 22, fontWeight: FontWeight.w500),
         ),
         actions: [
           Row(
@@ -22,8 +22,7 @@ class EntryPoupHelp {
                 child: Text(
                   'Cancel',
                   style: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -35,8 +34,7 @@ class EntryPoupHelp {
                 child: Text(
                   'Save',
                   style: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -60,8 +58,7 @@ class EntryPoupHelp {
                 decoration: InputDecoration(
                   labelText: 'Add a title for your feeling !',
                   labelStyle: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
                   border: OutlineInputBorder(),
@@ -99,8 +96,7 @@ class EntryPoupHelp {
                 decoration: InputDecoration(
                   labelText: 'Add a content for your feeling !',
                   labelStyle: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 30,
+                    fontSize: 22,
                     fontWeight: FontWeight.w700,
                   ),
                   border: OutlineInputBorder(),
@@ -136,11 +132,7 @@ class EntryPoupHelp {
         return AlertDialog(
           title: Text(
             "$dString, $month $day, $year ",
-            style: TextStyle(
-              fontFamily: 'Tangerine',
-              fontSize: 30,
-              fontWeight: FontWeight.w700,
-            ),
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
           ),
           actions: [
             Row(
@@ -151,8 +143,7 @@ class EntryPoupHelp {
                   child: Text(
                     'Cancel',
                     style: TextStyle(
-                      fontFamily: 'Tangerine',
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
@@ -164,8 +155,7 @@ class EntryPoupHelp {
                   child: Text(
                     'Delete',
                     style: TextStyle(
-                      fontFamily: 'Tangerine',
-                      fontSize: 20,
+                      fontSize: 18,
                       fontWeight: FontWeight.w500,
                       color: Colors.white,
                     ),
@@ -193,8 +183,7 @@ class EntryPoupHelp {
                     Text(
                       "My Feeling : ",
                       style: TextStyle(
-                        fontFamily: 'Tangerine',
-                        fontSize: 30,
+                        fontSize: 22,
                         fontWeight: FontWeight.w700,
                       ),
                     ),
@@ -210,11 +199,7 @@ class EntryPoupHelp {
                 SizedBox(height: 5),
                 Text(
                   entryModel.title,
-                  style: TextStyle(
-                    fontFamily: 'Tangerine',
-                    fontSize: 30,
-                    fontWeight: FontWeight.w700,
-                  ),
+                  style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
                 ),
                 SizedBox(height: 5),
                 Text(

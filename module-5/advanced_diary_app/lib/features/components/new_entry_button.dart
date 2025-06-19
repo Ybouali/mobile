@@ -9,24 +9,21 @@ class NewEntryButton extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EntryController entryController = Get.put(EntryController());
-    return Container(
-      margin: EdgeInsets.all(10),
-      child: ElevatedButton(
-        style: ElevatedButton.styleFrom(
-          shape: BeveledRectangleBorder(
-            borderRadius: BorderRadiusGeometry.circular(3),
-          ),
-          backgroundColor: Colors.green.shade400,
-          padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 20),
+    return ElevatedButton(
+      style: ElevatedButton.styleFrom(
+        shape: BeveledRectangleBorder(
+          borderRadius: BorderRadiusGeometry.circular(3),
         ),
-        onPressed: () => EntryPoupHelp().addEntry(context, entryController),
-        child: Text(
-          "New diary entry",
-          style: TextStyle(
-            fontSize: 35,
-            fontWeight: FontWeight.w700,
-            color: Colors.white70,
-          ),
+        backgroundColor: Colors.green.shade400,
+        padding: const EdgeInsets.symmetric(vertical: 5, horizontal: 10),
+      ),
+      onPressed: () => EntryPoupHelp().addEntry(context, entryController),
+      child: Text(
+        "New diary entry",
+        style: TextStyle(
+          fontSize: 22,
+          fontWeight: FontWeight.w700,
+          color: Colors.white,
         ),
       ),
     );

@@ -66,7 +66,7 @@ class EntryCard extends StatelessWidget {
                   width: 100,
                   child: Text(
                     entry.title,
-                    style: TextStyle(fontSize: 20, fontWeight: FontWeight.w600),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

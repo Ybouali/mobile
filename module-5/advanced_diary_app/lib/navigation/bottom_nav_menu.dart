@@ -7,30 +7,53 @@ class BottomNavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final EntryController entryController = Get.put(EntryController());
+    final EntryController navController = Get.put(EntryController());
     return Scaffold(
       backgroundColor: Colors.grey.shade500,
-      bottomNavigationBar: NavigationBar(
-        backgroundColor: Colors.grey.shade500,
-        height: 80,
-        elevation: 0,
-        selectedIndex: entryController.selectedIndex.value,
-        onDestinationSelected: (value) =>
-            entryController.selectedIndex.value = value,
-        destinations: [
-          NavigationDestination(icon: Icon(Icons.person, size: 32), label: ''),
-          NavigationDestination(
-            icon: Icon(Icons.calendar_month, size: 32),
-            label: '',
-          ),
-        ],
+      bottomNavigationBar: Obx(
+        () => NavigationBar(
+          indicatorColor: Colors.blue,
+          labelBehavior: NavigationDestinationLabelBehavior.alwaysHide,
+          backgroundColor: Colors.grey.shade500,
+          height: 80,
+          elevation: 0,
+          selectedIndex: navController.selectedIndex.value,
+          onDestinationSelected: (value) =>
+              navController.selectedIndex.value = value,
+          destinations: [
+            NavigationDestination(
+              icon: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: navController.selectedIndex.value == 0
+                    ? Colors.blue
+                    : Colors.grey.shade500,
+                child: Icon(Icons.person, size: 32),
+              ),
+              label: '',
+            ),
+            NavigationDestination(
+              icon: Container(
+                width: double.infinity,
+                height: double.infinity,
+                color: navController.selectedIndex.value == 1
+                    ? Colors.blue
+                    : Colors.grey.shade500,
+                child: Icon(Icons.calendar_month, size: 32),
+              ),
+              label: '',
+            ),
+          ],
+        ),
       ),
       body: Obx(() {
-        if (entryController.selectedIndex.value == 0) {
-          entryController.getAllEntrybyEmail();
+        if (navController.selectedIndex.value == 0) {
+          navController.getAllEntrybyEmail();
+        } else {
+          navController.getAllEntrybyEmailAndFixedTime(DateTime.now());
         }
 
-        return entryController.screens[entryController.selectedIndex.value];
+        return navController.screens[navController.selectedIndex.value];
       }),
     );
   }

@@ -17,17 +17,20 @@ class FeelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EntryController entryController = Get.put(EntryController());
-    final double percent = entryController.getFeelingPercentage(feeling);
-    return Row(
-      children: [
-        const SizedBox(width: 5),
-        Icon(icon, size: 32, color: colorIcon),
-        const SizedBox(width: 30),
-        Text(
-          "$percent %",
-          style: TextStyle(fontSize: 30, fontWeight: FontWeight.w700),
-        ),
-      ],
+    final String percent = entryController.getFeelingPercentage(feeling);
+    return Padding(
+      padding: const EdgeInsets.all(8.0),
+      child: Row(
+        children: [
+          const SizedBox(width: 5),
+          Icon(icon, size: 32, color: colorIcon),
+          const SizedBox(width: 30),
+          Text(
+            "$percent %",
+            style: TextStyle(fontSize: 22, fontWeight: FontWeight.w700),
+          ),
+        ],
+      ),
     );
   }
 }

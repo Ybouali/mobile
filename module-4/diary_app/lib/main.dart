@@ -40,9 +40,11 @@ class _MyAppState extends State<MyApp> {
     return GetMaterialApp(
       theme: ThemeData(fontFamily: "Tangerine"),
       debugShowCheckedModeBanner: false,
-      home: entryController.user.value != null
-          ? BottomNavMenu()
-          : OnBordingScreen(),
+      home: Obx(
+        () => entryController.user.value != null
+            ? BottomNavMenu()
+            : OnBordingScreen(),
+      ),
     );
   }
 }

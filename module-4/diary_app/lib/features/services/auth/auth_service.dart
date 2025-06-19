@@ -41,7 +41,6 @@ class AuthService {
         value: credentials.expiresAt.toString(),
       );
     } catch (e) {
-      debugPrint("FROM LOGIN");
       debugPrint(e.toString());
     }
   }
