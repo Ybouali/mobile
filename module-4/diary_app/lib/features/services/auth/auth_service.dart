@@ -1,7 +1,9 @@
 import 'package:auth0_flutter/auth0_flutter.dart';
 import 'package:diary_app/features/controllers/entry_controller.dart';
 import 'package:diary_app/features/models/user_model.dart';
+import 'package:diary_app/navigation/bottom_nav_menu.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
@@ -10,6 +12,14 @@ class AuthService {
 
   Future<void> login() async {
     try {
+      if (_entryController.user.value != null &&
+          _entryController.user.value!.checkExp()) {
+        Get.to(() => BottomNavMenu());
+        return;
+      }
+
+      _entryController.user.value = UserModel.empty();
+
       final (domain, clientId) = getAuth0();
       final auth0 = Auth0(domain, clientId);
       final credentials = await auth0.webAuthentication().login();
@@ -19,7 +29,19 @@ class AuthService {
         name: credentials.user.name!,
         expiresAt: credentials.expiresAt,
       );
+
+      // Store the user in secure_storage
+
+      final storage = FlutterSecureStorage();
+
+      await storage.write(key: "email", value: credentials.user.email!);
+      await storage.write(key: "name", value: credentials.user.name!);
+      await storage.write(
+        key: "expiresAt",
+        value: credentials.expiresAt.toString(),
+      );
     } catch (e) {
+      debugPrint("FROM LOGIN");
       debugPrint(e.toString());
     }
   }
@@ -27,18 +49,20 @@ class AuthService {
   (String, String) getAuth0() {
     final String domain = dotenv.get('DOMAIN_AUTH0');
     final String clientId = dotenv.get('CLIENT_ID_AUTH0');
-
     return (domain, clientId);
   }
 
   Future<void> logoutAuth() async {
     final (domain, clientId) = getAuth0();
-    print(domain);
-    print(clientId);
 
     final auth0 = Auth0(domain, clientId);
     try {
       await auth0.webAuthentication().logout();
+      final storage = FlutterSecureStorage();
+      await storage.write(key: "email", value: "");
+      await storage.write(key: "name", value: "");
+      await storage.write(key: "expiresAt", value: DateTime(0).toString());
+      _entryController.user.value = UserModel.empty();
     } catch (e) {
       debugPrint(e.toString());
     }

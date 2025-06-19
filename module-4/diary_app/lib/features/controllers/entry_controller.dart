@@ -4,6 +4,7 @@ import 'package:diary_app/features/models/user_model.dart';
 import 'package:diary_app/features/screens/entry_screen.dart';
 import 'package:diary_app/features/screens/profile_screen.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_secure_storage/flutter_secure_storage.dart';
 import 'package:get/get.dart';
 import 'package:iconsax/iconsax.dart';
 
@@ -16,7 +17,7 @@ class EntryController extends GetxController {
   final List<Widget> screens = [ProfileScreen(), EntryScreen()];
   final RxInt selectedIndex = 0.obs;
 
-  final Rx<UserModel?> user = null.obs;
+  final Rx<UserModel?> user = UserModel.empty().obs;
 
   final Rx<Feeling> selectedFeelingOnCreated = Feeling.happy.obs;
   final RxList<EntryModel> entryList = <EntryModel>[].obs;
@@ -44,8 +45,29 @@ class EntryController extends GetxController {
 
   @override
   void onInit() async {
+    await initUserIfIsOnStorage();
     getAllEntrybyEmail();
     super.onInit();
+  }
+
+  Future<void> initUserIfIsOnStorage() async {
+    final storage = FlutterSecureStorage();
+
+    final String? email = await storage.read(key: "email");
+    final String? name = await storage.read(key: "name");
+    final String? expiresAt = await storage.read(key: "expiresAt");
+
+    if (email != null && name != null && expiresAt != null) {
+      UserModel oldUser = UserModel(
+        email: email,
+        name: name,
+        expiresAt: DateTime.parse(expiresAt),
+      );
+      if (oldUser.checkExp()) {
+        user.value = oldUser;
+      }
+      user.value = UserModel.empty();
+    }
   }
 
   void nextFeeling() {
@@ -66,8 +88,7 @@ class EntryController extends GetxController {
     try {
       entryList.value = [];
 
-      if (user.value != null &&
-          titleController.text.isNotEmpty &&
+      if (titleController.text.isNotEmpty &&
           contentController.text.isNotEmpty) {
         final String useremail = user.value!.email;
         final snapshot = await _firebaseFirestore
@@ -87,7 +108,7 @@ class EntryController extends GetxController {
 
   Future<void> deleteEntry(String userEmail, String entryId) async {
     try {
-      if (user.value != null && user.value!.email == userEmail) {
+      if (user.value!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
         await getAllEntrybyEmail();
       }
@@ -98,21 +119,19 @@ class EntryController extends GetxController {
 
   Future<void> createEntry() async {
     try {
-      if (user.value != null) {
-        final String userEmail = user.value!.email;
-        final String title = titleController.text;
-        final String content = contentController.text;
+      final String userEmail = user.value!.email;
+      final String title = titleController.text;
+      final String content = contentController.text;
 
-        await _firebaseFirestore.collection("notes").add({
-          'userEmail': userEmail,
-          'created_at': FieldValue.serverTimestamp(),
-          'title': title,
-          'content': content,
-          'feeling': selectedFeelingOnCreated.value.index,
-        });
+      await _firebaseFirestore.collection("notes").add({
+        'userEmail': userEmail,
+        'created_at': FieldValue.serverTimestamp(),
+        'title': title,
+        'content': content,
+        'feeling': selectedFeelingOnCreated.value.index,
+      });
 
-        await getAllEntrybyEmail();
-      }
+      await getAllEntrybyEmail();
     } catch (e) {
       debugPrint(e.toString());
     }

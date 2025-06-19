@@ -1,3 +1,4 @@
+import 'package:diary_app/features/controllers/entry_controller.dart';
 import 'package:diary_app/features/screens/on_bording_screen.dart';
 import 'package:diary_app/features/services/auth/auth_service.dart';
 import 'package:flutter/material.dart';
@@ -8,6 +9,7 @@ class HeaderProfile extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    final EntryController entryController = Get.put(EntryController());
     return Container(
       padding: EdgeInsets.symmetric(horizontal: 8),
       width: double.infinity,
@@ -45,21 +47,16 @@ class HeaderProfile extends StatelessWidget {
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Text(
-                "Yassine Bouali",
-                style: TextStyle(
-                  fontFamily: "Tangerine",
-                  fontSize: 30,
-                  fontWeight: FontWeight.w900,
-                ),
+                entryController.user.value!.name,
+                style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
               ),
               // Text email
               Text(
-                "yassine.bouali.bo@gmail.com",
+                entryController.user.value!.email,
                 style: TextStyle(
-                  fontFamily: "Tangerine",
-                  fontSize: 23,
+                  fontSize: 16,
                   fontWeight: FontWeight.w600,
-                  color: Colors.black87,
+                  color: Colors.black45,
                 ),
               ),
             ],

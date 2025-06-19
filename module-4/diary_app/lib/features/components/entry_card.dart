@@ -29,25 +29,16 @@ class EntryCard extends StatelessWidget {
               children: [
                 Text(
                   day,
-                  style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   EntryUtilsFunctions().getNameOfMonth(entry.date!),
-                  style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 20,
-                    fontWeight: FontWeight.w600,
-                  ),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w600),
                 ),
                 Text(
                   year,
                   style: TextStyle(
-                    fontFamily: "Tangerine",
-                    fontSize: 20,
+                    fontSize: 16,
                     fontWeight: FontWeight.w600,
                     color: Colors.grey,
                   ),
@@ -75,11 +66,7 @@ class EntryCard extends StatelessWidget {
                   width: 100,
                   child: Text(
                     entry.title,
-                    style: TextStyle(
-                      fontFamily: "Tangerine",
-                      fontSize: 50,
-                      fontWeight: FontWeight.w600,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w600),
                     overflow: TextOverflow.ellipsis,
                     maxLines: 1,
                   ),

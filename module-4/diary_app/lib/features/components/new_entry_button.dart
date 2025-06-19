@@ -22,8 +22,7 @@ class NewEntryButton extends StatelessWidget {
         child: Text(
           "New diary entry",
           style: TextStyle(
-            fontFamily: "Tangerine",
-            fontSize: 35,
+            fontSize: 26,
             fontWeight: FontWeight.w700,
             color: Colors.white70,
           ),
@@ -39,11 +38,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
     builder: (BuildContext context) => AlertDialog(
       title: Text(
         "Add an Entry",
-        style: TextStyle(
-          fontFamily: "Tangerine",
-          fontSize: 20,
-          fontWeight: FontWeight.w500,
-        ),
+        style: TextStyle(fontSize: 18, fontWeight: FontWeight.w500),
       ),
       actions: [
         Row(
@@ -55,7 +50,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
                 'Cancel',
                 style: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                 ),
@@ -68,7 +63,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
                 'Save',
                 style: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 20,
+                  fontSize: 18,
                   fontWeight: FontWeight.w500,
                   color: Colors.white,
                 ),
@@ -93,7 +88,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
                 labelText: 'Add a title for your feeling !',
                 labelStyle: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 30,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
                 border: OutlineInputBorder(),
@@ -131,7 +126,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
                 labelText: 'Add a content for your feeling !',
                 labelStyle: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 30,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
                 border: OutlineInputBorder(),

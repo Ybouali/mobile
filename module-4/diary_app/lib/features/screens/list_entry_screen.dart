@@ -29,11 +29,7 @@ class ListEntryScreen extends StatelessWidget {
                 return Center(
                   child: Text(
                     "No entry !, Try to add one !",
-                    style: TextStyle(
-                      fontFamily: "Tangerine",
-                      fontSize: 30,
-                      fontWeight: FontWeight.w900,
-                    ),
+                    style: TextStyle(fontSize: 22, fontWeight: FontWeight.w900),
                   ),
                 );
               }
@@ -53,8 +49,7 @@ class ListEntryScreen extends StatelessWidget {
                       Text(
                         "Your last diary entries",
                         style: TextStyle(
-                          fontFamily: "Tangerine",
-                          fontSize: 30,
+                          fontSize: 22,
                           fontWeight: FontWeight.w600,
                         ),
                       ),
@@ -113,7 +108,7 @@ void _showMoreInfoOfFeeling(
           "$dString, $month $day, $year ",
           style: TextStyle(
             fontFamily: 'Tangerine',
-            fontSize: 30,
+            fontSize: 22,
             fontWeight: FontWeight.w700,
           ),
         ),
@@ -127,7 +122,7 @@ void _showMoreInfoOfFeeling(
                   'Cancel',
                   style: TextStyle(
                     fontFamily: 'Tangerine',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -140,7 +135,7 @@ void _showMoreInfoOfFeeling(
                   'Delete',
                   style: TextStyle(
                     fontFamily: 'Tangerine',
-                    fontSize: 20,
+                    fontSize: 18,
                     fontWeight: FontWeight.w500,
                     color: Colors.white,
                   ),
@@ -166,7 +161,7 @@ void _showMoreInfoOfFeeling(
                 entryModel.title,
                 style: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 30,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
               ),
@@ -178,7 +173,7 @@ void _showMoreInfoOfFeeling(
                     "My Feeling : ",
                     style: TextStyle(
                       fontFamily: 'Tangerine',
-                      fontSize: 30,
+                      fontSize: 22,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -196,7 +191,7 @@ void _showMoreInfoOfFeeling(
                 entryModel.content,
                 style: TextStyle(
                   fontFamily: 'Tangerine',
-                  fontSize: 30,
+                  fontSize: 22,
                   fontWeight: FontWeight.w700,
                 ),
               ),
