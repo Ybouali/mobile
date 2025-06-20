@@ -2,6 +2,30 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
+	<!-- Location Permissions -->
+    <key>NSLocationWhenInUseUsageDescription</key>
+    <string>This app needs your location to provide weather data.</string>
+    <key>NSLocationAlwaysAndWhenInUseUsageDescription</key>
+    <string>This app needs your location even when in the background.</string>
+    <key>NSLocationAlwaysUsageDescription</key>
+    <string>Background location access is needed for updates.</string>
+
+    <!-- Network Permissions -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>This app checks your local network for weather services.</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_services._tcp</string>
+    </array>
+
+    <!-- Flutter Debugging (for development) -->
+    <key>NSLocalNetworkUsageDescription</key>
+    <string>Required for Flutter debugging</string>
+    <key>NSBonjourServices</key>
+    <array>
+        <string>_dartobservatory._tcp</string>
+    </array>
+
 	<key>CFBundleDevelopmentRegion</key>
 	<string>$(DEVELOPMENT_LANGUAGE)</string>
 	<key>CFBundleExecutable</key>

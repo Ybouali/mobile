@@ -9,6 +9,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
 
   @override
   Widget build(BuildContext context) {
+    final focusNode = FocusNode();
     final wheatherController = Get.put(WeatherController());
     return AppBar(
       backgroundColor: Color(0xFF5B5E73),
@@ -29,6 +30,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
             ),
             Expanded(
               child: TextField(
+                focusNode: focusNode,
                 controller: wheatherController.textFieldController,
                 decoration: InputDecoration(
                   hintStyle: TextStyle(color: Colors.grey),

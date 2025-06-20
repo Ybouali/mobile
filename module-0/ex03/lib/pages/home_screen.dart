@@ -73,18 +73,32 @@ class _HomeScreenState extends State<HomeScreen> {
                   // Grid for the buttons
                   Flexible(
                     child: SizedBox(
-                      height: orientation == Orientation.portrait ? 350 : 200,
+                      height:
+                          isOnLargScreen(context)
+                              ? double.infinity
+                              : orientation == Orientation.portrait
+                              ? 350
+                              : 200,
                       child: Scrollbar(
                         child: GridView.count(
                           shrinkWrap: true,
                           physics:
-                              orientation == Orientation.portrait
+                              orientation == Orientation.portrait ||
+                                      isOnLargScreen(context)
                                   ? NeverScrollableScrollPhysics()
                                   : BouncingScrollPhysics(),
                           crossAxisCount:
-                              orientation == Orientation.portrait ? 5 : 5,
+                              isOnLargScreen(context)
+                                  ? 5
+                                  : orientation == Orientation.portrait
+                                  ? 5
+                                  : 5,
                           childAspectRatio:
-                              orientation == Orientation.portrait ? 1 : 5,
+                              isOnLargScreen(context)
+                                  ? 2
+                                  : orientation == Orientation.portrait
+                                  ? 1
+                                  : 1.5,
                           children:
                               keys.map((val) {
                                 return CustomeButton(
@@ -102,5 +116,9 @@ class _HomeScreenState extends State<HomeScreen> {
         ),
       ),
     );
+  }
+
+  bool isOnLargScreen(BuildContext context) {
+    return MediaQuery.of(context).size.width >= 600;
   }
 }

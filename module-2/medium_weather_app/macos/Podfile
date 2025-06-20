@@ -9,6 +9,18 @@ project 'Runner', {
   'Release' => :release,
 }
 
+# post_install do |installer|
+#   installer.pods_project.targets.each do |target|
+#     target.build_configurations.each do |config|
+#       # Properly escape DART_DEFINES
+#       if config.build_settings['DART_DEFINES']
+#         config.build_settings['DART_DEFINES'] = config.build_settings['DART_DEFINES'].gsub('"', '\"')
+#       end
+#       config.build_settings['MACOSX_DEPLOYMENT_TARGET'] = '10.14'
+#     end
+#   end
+# end
+
 def flutter_root
   generated_xcode_build_settings_path = File.expand_path(File.join('..', 'Flutter', 'ephemeral', 'Flutter-Generated.xcconfig'), __FILE__)
   unless File.exist?(generated_xcode_build_settings_path)
