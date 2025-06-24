@@ -26,7 +26,7 @@ class HomeScreen extends StatelessWidget {
     "0",
     ".",
     "00",
-    "%",
+    "",
     "=",
   ];
 
@@ -54,66 +54,69 @@ class HomeScreen extends StatelessWidget {
       body: SafeArea(
         child: OrientationBuilder(
           builder:
-              (context, orientation) => Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Column(
-                    children: [
-                      const SizedBox(height: 10),
-                      // Text Field for the input
-                      CustomeTestField(controller: inputController),
+              (context, orientation) => LayoutBuilder(
+                builder:
+                    (context, constraints) => SingleChildScrollView(
+                      child: ConstrainedBox(
+                        constraints: BoxConstraints(
+                          minHeight: constraints.maxHeight,
+                        ),
+                        child: IntrinsicHeight(
+                          child: Column(
+                            children: [
+                              const SizedBox(height: 5),
+                              // Text Field for the input
+                              CustomeTestField(controller: inputController),
 
-                      const SizedBox(height: 10),
-                      // Text Field for the output
-                      CustomeTestField(controller: resultController),
-                    ],
-                  ),
+                              const SizedBox(height: 5),
+                              // Text Field for the output
+                              CustomeTestField(controller: resultController),
 
-                  const SizedBox(height: 10),
+                              // const SizedBox(height: 10),
+                              Spacer(),
 
-                  // Grid for the buttons
-                  Flexible(
-                    child: SizedBox(
-                      height:
-                          isOnLargScreen(context)
-                              ? double.infinity
-                              : orientation == Orientation.portrait
-                              ? 350
-                              : 200,
-                      child: Scrollbar(
-                        child: GridView.count(
-                          shrinkWrap: true,
-                          physics:
-                              orientation == Orientation.portrait ||
-                                      isOnLargScreen(context)
-                                  ? NeverScrollableScrollPhysics()
-                                  : BouncingScrollPhysics(),
-                          crossAxisCount:
-                              isOnLargScreen(context)
-                                  ? 5
-                                  : orientation == Orientation.portrait
-                                  ? 5
-                                  : 5,
-                          childAspectRatio:
-                              isOnLargScreen(context)
-                                  ? 2
-                                  : orientation == Orientation.portrait
-                                  ? 1
-                                  : 1.5,
-                          children:
-                              keys.map((val) {
-                                return CustomeButton(
-                                  name: val,
-                                  onTap: () {
-                                    logger.i("button presed :$val");
-                                  },
-                                );
-                              }).toList(),
+                              // Grid for the buttons
+                              SizedBox(
+                                height:
+                                    isOnLargScreen(context)
+                                        ? orientation == Orientation.portrait
+                                            ? 400
+                                            : 300
+                                        : orientation == Orientation.portrait
+                                        ? 350
+                                        : 200,
+                                child: Scrollbar(
+                                  child: GridView.count(
+                                    shrinkWrap: true,
+                                    physics: NeverScrollableScrollPhysics(),
+                                    crossAxisCount: 5,
+                                    childAspectRatio:
+                                        isOnLargScreen(context)
+                                            ? orientation ==
+                                                    Orientation.portrait
+                                                ? 2
+                                                : 4
+                                            : orientation ==
+                                                Orientation.portrait
+                                            ? 1
+                                            : 6,
+                                    children:
+                                        keys.map((val) {
+                                          return CustomeButton(
+                                            name: val,
+                                            onTap: () {
+                                              logger.i("button presed :$val");
+                                            },
+                                          );
+                                        }).toList(),
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
                         ),
                       ),
                     ),
-                  ),
-                ],
               ),
         ),
       ),

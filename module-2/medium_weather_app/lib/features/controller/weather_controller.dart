@@ -11,11 +11,9 @@ import 'package:http/http.dart' as http;
 import 'package:medium_weather_app/features/models/weather_model.dart';
 import 'package:medium_weather_app/features/models/weekly_weather_model.dart';
 import 'package:medium_weather_app/features/screens/currently_screen.dart';
-import 'package:medium_weather_app/features/screens/geolocator_denied_permission_screen.dart';
 import 'package:medium_weather_app/features/screens/today_screen.dart';
 import 'package:medium_weather_app/features/screens/weekly_screen.dart';
 import 'package:medium_weather_app/features/services/network_service.dart';
-import 'package:medium_weather_app/navigation/bottom_nav_menu.dart';
 
 class WeatherController extends GetxController {
   static WeatherController get instance => Get.find();
@@ -51,7 +49,6 @@ class WeatherController extends GetxController {
       CurrentlyScreen(text: "Current"),
       TodayScreen(text: "Today"),
       WeeklyScreen(text: "Weekly"),
-      GeolocatorDeniedPermissionScreen(),
     ];
 
     Future.delayed(Duration.zero, () async {
@@ -90,19 +87,20 @@ class WeatherController extends GetxController {
     }
     final isConnected = await NetworkService.isConnected();
     if (!isConnected) {
-      _goToErrorPage(2);
+      errorNumber.value = 2;
       return;
     }
 
     if (await _checkPermission()) {
-      _goToErrorPage(1);
+      errorNumber.value = 1;
       return;
     }
 
     if (textFieldController.text.length < 6) {
-      _goToErrorPage(3);
+      errorNumber.value = 3;
       return;
     }
+    // errorNumber.value = 0;
 
     if (selectedIndex.value == 3) {
       selectedIndex.value = 0;
@@ -110,20 +108,17 @@ class WeatherController extends GetxController {
     getLanAndLongFromName();
     if (selectedIndex.value == 0) {
       // Current Screen
+      curr.value = null;
       await getCurrentWeather();
     } else if (selectedIndex.value == 1) {
       // Today Screen
+      weatherDay.value = null;
       await getTheDayWeather();
     } else if (selectedIndex.value == 2) {
       // Weekly Screen
+      weatherWeek.value = null;
       await getTheWeekWeather();
     }
-  }
-
-  void _goToErrorPage(int n) {
-    selectedIndex.value = 3;
-    errorNumber.value = n;
-    Get.offAll(() => BottomNavMenu());
   }
 
   Future<bool> _checkPermission() async {
@@ -139,14 +134,14 @@ class WeatherController extends GetxController {
     }
     final isConnected = await NetworkService.isConnected();
     if (!isConnected) {
-      _goToErrorPage(2);
+      errorNumber.value = 2;
       return;
     }
     try {
       numberTimeCallReq.value += 1;
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        _goToErrorPage(1);
+        errorNumber.value = 1;
         return;
       }
 
@@ -155,7 +150,7 @@ class WeatherController extends GetxController {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          _goToErrorPage(1);
+          errorNumber.value = 1;
           return;
         }
       }
@@ -191,14 +186,16 @@ class WeatherController extends GetxController {
       currentLongitude.value = position.longitude;
 
       if (currentLatitude.value == 0.0 || currentLongitude.value == 0.0) {
-        _goToErrorPage(3);
+        errorNumber.value = 1;
       }
+
+      errorNumber.value = 0;
 
       await getNameFromPosition();
 
       await getTheWeatherAndSetTheValues();
     } catch (e) {
-      _goToErrorPage(1);
+      errorNumber.value = 1;
     }
   }
 
@@ -227,6 +224,7 @@ class WeatherController extends GetxController {
       getNameFromPosition();
     } catch (e) {
       // Just Ignoring the e
+      errorNumber.value = 1;
     }
   }
 

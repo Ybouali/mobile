@@ -1,6 +1,7 @@
 import 'package:advanced_weather_app/features/components/info_weather_day_by_hour.dart';
 import 'package:advanced_weather_app/features/components/widgets/line_chart_widget_today_screen.dart';
 import 'package:advanced_weather_app/features/models/weather_model.dart';
+import 'package:advanced_weather_app/features/screens/widgets/error_new_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:advanced_weather_app/features/components/custom_app_bar.dart';
@@ -23,6 +24,15 @@ class TodayScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Obx(() {
+            if (weatherController.errorNumber.value != 0) {
+              return ErrorNewWidget(
+                error: weatherController
+                    .errorStrings
+                    .value[weatherController.errorNumber.value]
+                    .toString(),
+              );
+            }
+
             if (weatherController.curr.value != null) {
               return Padding(
                 padding: const EdgeInsets.all(8),

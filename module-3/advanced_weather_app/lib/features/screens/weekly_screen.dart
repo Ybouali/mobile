@@ -2,6 +2,7 @@ import 'package:advanced_weather_app/features/components/info_weather_weekly_per
 import 'package:advanced_weather_app/features/components/widgets/line_chart_widget_weekly_screen.dart';
 import 'package:advanced_weather_app/features/controller/weather_controller.dart';
 import 'package:advanced_weather_app/features/models/weekly_weather_model.dart';
+import 'package:advanced_weather_app/features/screens/widgets/error_new_widget.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:advanced_weather_app/features/components/custom_app_bar.dart';
@@ -21,6 +22,15 @@ class WeeklyScreen extends StatelessWidget {
       body: SingleChildScrollView(
         child: Center(
           child: Obx(() {
+            if (weatherController.errorNumber.value != 0) {
+              return ErrorNewWidget(
+                error: weatherController
+                    .errorStrings
+                    .value[weatherController.errorNumber.value]
+                    .toString(),
+              );
+            }
+
             if (weatherController.weatherWeek.value != null) {
               return Padding(
                 padding: const EdgeInsets.symmetric(

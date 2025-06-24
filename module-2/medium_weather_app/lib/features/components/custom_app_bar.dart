@@ -27,12 +27,13 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Obx(() {
                 if (weatherController.showSearchButton.value) {
                   return IconButton(
-                    onPressed: () {
+                    onPressed: () async {
+                      // print('Pressed !');
                       if (weatherController
                           .textFieldController
                           .text
                           .isNotEmpty) {
-                        weatherController.getTheWeatherAndSetTheValues();
+                        await weatherController.getTheWeatherAndSetTheValues();
                       }
                     },
                     icon: Icon(Icons.search, color: Colors.grey),
