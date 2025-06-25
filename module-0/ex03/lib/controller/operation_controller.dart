@@ -1,10 +1,7 @@
 import 'package:expressions/expressions.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/web.dart';
 
 class OperationController {
-  final logger = Logger();
-
   final TextEditingController inputController = TextEditingController();
   final TextEditingController resultController = TextEditingController();
 
