@@ -9,7 +9,13 @@ class OperationController {
   final TextEditingController resultController = TextEditingController();
 
   void operation(BuildContext context, String val) {
-    if (val == "C") {
+    if (val == "<-") {
+      if (inputController.text.isEmpty) return;
+      inputController.text = inputController.text.substring(
+        0,
+        inputController.text.length - 1,
+      );
+    } else if (val == "C") {
       inputController.clear();
     } else if (val == "AC") {
       inputController.clear();
@@ -20,7 +26,7 @@ class OperationController {
         // Show a popup for the error
         showErrorDialog(
           context,
-          "Make sure your operation doesn't contain invalid characters and doesn't have two operators next to each other.\nExample: 6*/5",
+          "Make sure your operation doesn't contain invalid characters and doesn't have two operators next to each other.\nExample: 6*/5 ...",
         );
       } else {
         // do the operatios
@@ -39,30 +45,34 @@ class OperationController {
   }
 
   bool _errorHandling(String val) {
-    String op = "+-/*";
+    val = val.replaceAll(' ', '');
+    final String exp = "+/*";
 
-    if (val.endsWith(op)) {
-      return true;
-    }
+    List<String> op = val.split("");
 
-    for (var i = 0; i < val.length; i++) {
-      if (op.contains(val[i]) || val[i] == "%") {
-        if (i + 1 < val.length) {
-          i += 1;
-        }
-        if (op.contains(val[i]) || val[i] == "%") {
+    for (var i = 0; i < op.length; i++) {
+      if (_isDigit(op[i])) continue;
+
+      if (op[i] == ".") {
+        if (!_isDigit(op[i + 1])) return true;
+      } else if (exp.contains(op[i])) {
+        if (op[i] != "-" &&
+            op[i + 1] != "-" &&
+            (!_isDigit(op[i - 1]) || !_isDigit(op[i + 1]))) {
           return true;
         }
-      } else if (!_isDigit(val[i])) {
-        return true;
       }
+
+      if (op[i] == "-" && i < val.length && !_isDigit(op[i + 1])) return true;
     }
 
     return false;
   }
 
-  bool _isDigit(String char) {
-    return char.codeUnitAt(0) >= 48 && char.codeUnitAt(0) <= 57;
+  bool _isDigit(String character) {
+    if (character.isEmpty) return false;
+    int code = character.codeUnitAt(0);
+    return code >= 48 && code <= 57;
   }
 
   void showErrorDialog(BuildContext context, String message) {

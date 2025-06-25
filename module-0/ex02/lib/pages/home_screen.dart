@@ -1,8 +1,6 @@
-// import 'package:ex02/pages/widgets/grid_widget.dart';
 import 'package:ex02/pages/widgets/custome_button.dart';
 import 'package:ex02/pages/widgets/custome_test_field.dart';
 import 'package:flutter/material.dart';
-import 'package:logger/logger.dart';
 
 class HomeScreen extends StatelessWidget {
   HomeScreen({super.key});
@@ -26,8 +24,8 @@ class HomeScreen extends StatelessWidget {
     "0",
     ".",
     "00",
-    "",
     "=",
+    "<-",
   ];
 
   @override
@@ -38,7 +36,6 @@ class HomeScreen extends StatelessWidget {
     final TextEditingController resultController = TextEditingController(
       text: '0',
     );
-    final logger = Logger();
 
     return Scaffold(
       backgroundColor: Colors.cyanAccent,
@@ -105,7 +102,7 @@ class HomeScreen extends StatelessWidget {
                                           return CustomeButton(
                                             name: val,
                                             onTap: () {
-                                              logger.i("button presed :$val");
+                                              debugPrint(val);
                                             },
                                           );
                                         }).toList(),

@@ -32,7 +32,7 @@ class _HomeScreenState extends State<HomeScreen> {
     ".",
     "00",
     "=",
-    "",
+    "<-",
   ];
 
   @override
