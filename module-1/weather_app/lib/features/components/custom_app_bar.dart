@@ -32,6 +32,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: TextField(
                 focusNode: focusNode,
                 controller: wheatherController.textFieldController,
+                cursorColor: Colors.white70,
                 decoration: InputDecoration(
                   hintStyle: TextStyle(color: Colors.grey),
                   hintText: "Search location ...",

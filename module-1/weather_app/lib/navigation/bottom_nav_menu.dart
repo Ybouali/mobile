@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:weather_app/features/components/custom_app_bar.dart';
 import 'package:weather_app/features/controller/weather_controller.dart';
 
 class BottomNavMenu extends StatelessWidget {
@@ -7,16 +8,23 @@ class BottomNavMenu extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final wheatherController = Get.put(WeatherController());
+    final weatherController = Get.put(WeatherController());
 
     return Scaffold(
+      appBar: CustomAppBar(
+        onSearch: () => weatherController.onSearch(),
+        onGeo: () => weatherController.geoLocation(),
+      ),
       bottomNavigationBar: Obx(
         () => NavigationBar(
           height: 80,
           elevation: 0,
-          selectedIndex: wheatherController.selectedIndex.value,
-          onDestinationSelected:
-              (value) => wheatherController.selectedIndex.value = value,
+          selectedIndex: weatherController.selectedIndex.value,
+          onDestinationSelected: (value) {
+            weatherController.textFieldController.clear();
+            // weatherController.searchedText. = "";
+            weatherController.selectedIndex.value = value;
+          },
           destinations: [
             NavigationDestination(
               icon: Icon(Icons.settings),
@@ -34,7 +42,7 @@ class BottomNavMenu extends StatelessWidget {
         ),
       ),
       body: Obx(
-        () => wheatherController.screen[wheatherController.selectedIndex.value],
+        () => weatherController.screen[weatherController.selectedIndex.value],
       ),
     );
   }

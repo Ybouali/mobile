@@ -24,8 +24,12 @@ class WeatherController extends GetxController {
     super.onInit();
   }
 
+  void geoLocation() {
+    searchedText.value = "Geolocation";
+  }
+
   void onSearch() {
     searchedText.value = textFieldController.text;
-    // Get.offAll(() => BottomNavMenu());
+    textFieldController.clear();
   }
 }
