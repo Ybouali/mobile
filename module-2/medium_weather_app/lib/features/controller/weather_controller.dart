@@ -77,7 +77,7 @@ class WeatherController extends GetxController {
       errorNumber.value = 3;
       return;
     }
-    // errorNumber.value = 0;
+    errorNumber.value = 0;
 
     if (selectedIndex.value == 3) {
       selectedIndex.value = 0;
