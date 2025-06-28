@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:medium_weather_app/features/components/custom_app_bar.dart';
 import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class BottomNavMenu extends StatelessWidget {
@@ -16,6 +17,14 @@ class BottomNavMenu extends StatelessWidget {
         weatherController.showSearchButton.value = true;
       },
       child: Scaffold(
+        appBar: CustomAppBar(
+          onPress: () async {
+            if (weatherController.textFieldController.text.isNotEmpty) {
+              await weatherController.getTheWeatherAndSetTheValues();
+            }
+          },
+          onGeo: () async => await weatherController.getCurrentLocation(),
+        ),
         bottomNavigationBar: Obx(
           () => NavigationBar(
             height: 80,

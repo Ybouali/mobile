@@ -5,7 +5,8 @@ import 'package:medium_weather_app/features/controller/weather_controller.dart';
 
 class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
   final VoidCallback onGeo;
-  const CustomAppBar({super.key, required this.onGeo});
+  final VoidCallback onPress;
+  const CustomAppBar({super.key, required this.onGeo, required this.onPress});
 
   @override
   Widget build(BuildContext context) {
@@ -27,15 +28,7 @@ class CustomAppBar extends StatelessWidget implements PreferredSizeWidget {
               child: Obx(() {
                 if (weatherController.showSearchButton.value) {
                   return IconButton(
-                    onPressed: () async {
-                      // print('Pressed !');
-                      if (weatherController
-                          .textFieldController
-                          .text
-                          .isNotEmpty) {
-                        await weatherController.getTheWeatherAndSetTheValues();
-                      }
-                    },
+                    onPressed: onPress,
                     icon: Icon(Icons.search, color: Colors.grey),
                     constraints: const BoxConstraints(),
                     splashRadius: 20,

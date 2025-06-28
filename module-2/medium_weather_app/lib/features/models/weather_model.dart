@@ -9,15 +9,19 @@ class WeatherModel {
     required this.date,
   });
 
-  factory WeatherModel.fromJson(Map<String, dynamic> json, bool date) {
-    final List<String> time = json['current']['last_updated'].toString().split(
-      " ",
-    );
-
+  factory WeatherModel.fromJson(Map<String, dynamic> json, bool isDaily) {
     return WeatherModel(
-      tempC: json['current']['temp_c'],
-      windKph: json['current']['wind_kph'],
-      date: date ? DateTime.parse(time[0]) : DateTime.parse(time[0]),
+      tempC:
+          isDaily
+              ? json['daily']['temperature_2m_max'][0]
+              : json['current']['temperature_2m'],
+      windKph:
+          isDaily
+              ? json['daily']['windspeed_10m_max'][0]
+              : json['current']['windspeed_10m'],
+      date: DateTime.parse(
+        isDaily ? json['daily']['time'][0] : json['current']['time'],
+      ),
     );
   }
 }
