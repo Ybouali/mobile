@@ -11,16 +11,21 @@ class WeatherModel {
     required this.condition,
   });
 
-  factory WeatherModel.fromJson(Map<String, dynamic> json, bool date) {
-    final List<String> time = json['current']['last_updated'].toString().split(
-      " ",
-    );
+  factory WeatherModel.fromJson(
+    Map<String, dynamic> json,
+    String Function(int) weatherConditionMapper,
+  ) {
+    final windSpeedKph =
+        (json['current']['windspeed_10m'] as num).toDouble() * 3.6;
+
+    final weatherCode = json['current']['weathercode'] as int? ?? 0;
+    final condition = weatherConditionMapper(weatherCode);
 
     return WeatherModel(
-      tempC: json['current']['temp_c'],
-      windKph: json['current']['wind_kph'],
-      date: date ? DateTime.parse(time[0]) : DateTime.parse(time[0]),
-      condition: json['current']['condition']['text'],
+      tempC: (json['current']['temperature_2m'] as num).toDouble(),
+      windKph: windSpeedKph,
+      date: DateTime.parse(json['current']['time']),
+      condition: condition,
     );
   }
 }

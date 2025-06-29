@@ -249,27 +249,33 @@ class WeatherController extends GetxController {
       }).toList();
       // print(suggestionList.value);
     } else {
-      throw Exception("Failed to fetch suggestions");
+      debugPrint("Failed to fetch suggestions");
     }
   }
 
   Future<void> getCurrentWeather() async {
     try {
-      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
-
+      curr.value = null;
       final String url =
-          "http://api.weatherapi.com/v1/current.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}";
+          "https://api.open-meteo.com/v1/forecast?"
+          "latitude=${currentLatitude.value}&"
+          "longitude=${currentLongitude.value}&"
+          "current=temperature_2m,windspeed_10m&"
+          "daily=temperature_2m_max,windspeed_10m_max&"
+          "timezone=auto";
+
       final res = await http.get(Uri.parse(url));
 
       if (res.statusCode == 200) {
-        curr.value = WeatherModel.fromJson(jsonDecode(res.body), false);
-      } else if (res.statusCode == 401) {
-        throw Exception('Invalid API key or unauthorized access');
+        curr.value = WeatherModel.fromJson(
+          jsonDecode(res.body),
+          _getWeatherDescription,
+        );
       } else {
-        throw Exception('Failed to load weather data');
+        debugPrint('Failed to load weather data: ${res.statusCode}');
       }
     } catch (e) {
-      throw Exception('Failed to fetch weather: $e');
+      debugPrint('Failed to fetch weather: $e');
     }
   }
 
@@ -346,71 +352,128 @@ class WeatherController extends GetxController {
 
   Future<void> getTheDayWeather() async {
     try {
-      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
-
+      weatherDay.value = [];
       final String url =
-          "http://api.weatherapi.com/v1/forecast.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}&days=1&aqi=no&alerts=no";
+          "https://api.open-meteo.com/v1/forecast?"
+          "latitude=${currentLatitude.value}&"
+          "longitude=${currentLongitude.value}&"
+          "hourly=temperature_2m,windspeed_10m,weathercode&"
+          "forecast_days=1&"
+          "timezone=auto";
 
       final res = await http.get(Uri.parse(url));
 
       if (res.statusCode == 200) {
         final data = json.decode(res.body);
-        final hourlyData = data['forecast']['forecastday'][0]['hour'] as List;
+        final hourlyData = data['hourly'] as Map<String, dynamic>;
 
-        weatherDay.value = hourlyData.map((hDWeather) {
+        final itemCount = hourlyData['time']?.length ?? 0;
+
+        weatherDay.value = List<WeatherModel>.generate(itemCount, (index) {
+          final windSpeedKph =
+              ((hourlyData['windspeed_10m']?[index]?.toDouble() ?? 0.0) * 3.6)
+                  .roundToDouble();
+          final weatherCode = hourlyData['weathercode']?[index] as int? ?? 0;
+
           return WeatherModel(
-            tempC: hDWeather['temp_c']?.toDouble() ?? 0.0,
-            windKph: hDWeather['wind_kph']?.toDouble() ?? 0.0,
-            date: DateTime.parse(hDWeather['time']),
-            condition: "",
+            tempC: hourlyData['temperature_2m']?[index]?.toDouble() ?? 0.0,
+            windKph: windSpeedKph,
+            date: DateTime.parse(hourlyData['time']?[index]),
+            condition: _getWeatherDescription(
+              weatherCode,
+            ), // Add weather condition
           );
-        }).toList();
-      } else if (res.statusCode == 401) {
-        weatherDay.value = [];
-        throw Exception('Invalid API key or unauthorized access');
+        });
       } else {
         weatherDay.value = [];
-        throw Exception('Failed to load weather data');
+        debugPrint('Failed to load weather data: ${res.statusCode}');
       }
     } catch (e) {
       weatherDay.value = [];
-      throw Exception('Failed to fetch weather: $e');
+      debugPrint('Failed to fetch weather: $e');
     }
   }
 
   Future<void> getTheWeekWeather() async {
     try {
-      final apiKeyWeather = dotenv.env['WEATHER_API_KEY'];
-
+      weatherWeek.value = [];
       final String url =
-          "http://api.weatherapi.com/v1/forecast.json?key=$apiKeyWeather&q=${currentLatitude.value},${currentLongitude.value}&days=7&aqi=no&alerts=no";
+          "https://api.open-meteo.com/v1/forecast?"
+          "latitude=${currentLatitude.value}&"
+          "longitude=${currentLongitude.value}&"
+          "daily=weathercode,temperature_2m_max,temperature_2m_min,windspeed_10m_max&"
+          "timezone=auto";
 
       final res = await http.get(Uri.parse(url));
 
       if (res.statusCode == 200) {
         final data = json.decode(res.body);
-        final hourlyData = data['forecast']['forecastday'] as List;
+        final dailyData = data['daily'] as Map<String, dynamic>;
 
-        weatherWeek.value = hourlyData.map((day) {
-          final dayData = day['day'];
-          return WeeklyWeatherModel(
-            date: DateTime.parse(day['date']),
-            minTempC: dayData['mintemp_c']?.toDouble() ?? 0.0,
-            maxTempC: dayData['maxtemp_c']?.toDouble() ?? 0.0,
-            description: dayData['condition']['text'] ?? 'No description',
-            condition: dayData['condition']['text'] ?? '',
-          );
-        }).toList();
-      } else if (res.statusCode == 401) {
-        weatherWeek.value = [];
-        throw Exception('Invalid API key or unauthorized access');
+        weatherWeek.value = List<WeeklyWeatherModel>.generate(
+          dailyData['time']?.length ?? 0,
+          (index) {
+            return WeeklyWeatherModel(
+              date: DateTime.parse(dailyData['time'][index]),
+              minTempC:
+                  (dailyData['temperature_2m_min'][index] as num?)
+                      ?.toDouble() ??
+                  0.0,
+              maxTempC:
+                  (dailyData['temperature_2m_max'][index] as num?)
+                      ?.toDouble() ??
+                  0.0,
+              description: _getWeatherDescription(
+                dailyData['weathercode'][index] as int? ?? 0,
+              ),
+              condition: _getWeatherDescription(
+                dailyData['weathercode'][index] as int? ?? 0,
+              ),
+            );
+          },
+        );
       } else {
         weatherWeek.value = [];
-        throw Exception('Failed to load weather data');
+        debugPrint('Failed to load weather data: ${res.statusCode}');
       }
     } catch (e) {
       weatherWeek.value = [];
-      throw Exception('Failed to fetch weather: $e');
+      debugPrint('Failed to fetch weather: $e');
     }
+  }
+
+  String _getWeatherDescription(int weatherCode) {
+    const descriptions = {
+      0: 'Clear sky',
+      1: 'Mainly clear',
+      2: 'Partly cloudy',
+      3: 'Overcast',
+      45: 'Fog',
+      48: 'Depositing rime fog',
+      51: 'Light drizzle',
+      53: 'Moderate drizzle',
+      55: 'Dense drizzle',
+      56: 'Light freezing drizzle',
+      57: 'Dense freezing drizzle',
+      61: 'Slight rain',
+      63: 'Moderate rain',
+      65: 'Heavy rain',
+      66: 'Light freezing rain',
+      67: 'Heavy freezing rain',
+      71: 'Slight snow fall',
+      73: 'Moderate snow fall',
+      75: 'Heavy snow fall',
+      77: 'Snow grains',
+      80: 'Slight rain showers',
+      81: 'Moderate rain showers',
+      82: 'Violent rain showers',
+      85: 'Slight snow showers',
+      86: 'Heavy snow showers',
+      95: 'Thunderstorm',
+      96: 'Thunderstorm with slight hail',
+      99: 'Thunderstorm with heavy hail',
+    };
+
+    return descriptions[weatherCode] ?? 'Unknown weather';
   }
 }
