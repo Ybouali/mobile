@@ -37,6 +37,8 @@ class TodayScreen extends StatelessWidget {
               return Padding(
                 padding: const EdgeInsets.all(8),
                 child: Column(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+
                   children: [
                     const SizedBox(height: 30),
                     Text(
@@ -82,6 +84,7 @@ class TodayScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
+
                     // more info weather of a day
                     Container(
                       height: 150,
@@ -101,16 +104,14 @@ class TodayScreen extends StatelessWidget {
                         child: ListView.builder(
                           controller: scrollController,
                           scrollDirection: Axis.horizontal,
+                          shrinkWrap: true,
                           itemCount:
                               weatherController.weatherDay.value?.length ?? 0,
                           itemBuilder: (context, index) {
-                            if (weatherController.weatherDay.value != null) {
-                              final WeatherModel weather =
-                                  weatherController.weatherDay.value![index];
+                            final WeatherModel weather =
+                                weatherController.weatherDay.value![index];
 
-                              return InfoWeatherDayByHour(weather: weather);
-                            }
-                            return null;
+                            return InfoWeatherDayByHour(weather: weather);
                           },
                         ),
                       ),

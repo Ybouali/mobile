@@ -110,34 +110,36 @@ class WeeklyScreen extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(height: 20),
-                    Container(
-                      height: 150,
-                      decoration: BoxDecoration(
-                        color: Color.fromRGBO(95, 187, 233, 0.2),
-                        borderRadius: BorderRadius.circular(10),
-                      ),
-                      child: RawScrollbar(
-                        controller: scrollController,
-                        padding: const EdgeInsets.symmetric(),
-                        trackRadius: const Radius.circular(10),
-                        radius: const Radius.circular(10),
-                        trackVisibility: true,
-                        thumbColor: Colors.amber,
-                        thumbVisibility: true,
-                        interactive: true,
-                        child: ListView.builder(
+
+                    Center(
+                      child: Container(
+                        height: 150,
+                        decoration: BoxDecoration(
+                          color: Color.fromRGBO(95, 187, 233, 0.2),
+                          borderRadius: BorderRadius.circular(10),
+                        ),
+                        child: RawScrollbar(
                           controller: scrollController,
-                          scrollDirection: Axis.horizontal,
-                          itemCount:
-                              weatherController.weatherWeek.value?.length ?? 0,
-                          itemBuilder: (context, index) {
-                            if (weatherController.weatherWeek.value != null) {
+                          padding: const EdgeInsets.symmetric(),
+                          trackRadius: const Radius.circular(10),
+                          radius: const Radius.circular(10),
+                          trackVisibility: true,
+                          thumbColor: Colors.amber,
+                          thumbVisibility: true,
+                          interactive: true,
+                          child: ListView.builder(
+                            controller: scrollController,
+                            scrollDirection: Axis.horizontal,
+                            shrinkWrap: true,
+                            itemCount:
+                                weatherController.weatherWeek.value?.length ??
+                                0,
+                            itemBuilder: (context, index) {
                               final WeeklyWeatherModel weather =
                                   weatherController.weatherWeek.value![index];
                               return InfoWeatherWeeklyPerDay(weather: weather);
-                            }
-                            return null;
-                          },
+                            },
+                          ),
                         ),
                       ),
                     ),

@@ -43,7 +43,7 @@ class LineChartWidgetTodayScreen extends StatelessWidget {
           minX: 0,
           maxX: 23,
           minY: 0,
-          maxY: 40,
+          maxY: 60,
           lineBarsData: [
             LineChartBarData(
               spots: getSpots(),

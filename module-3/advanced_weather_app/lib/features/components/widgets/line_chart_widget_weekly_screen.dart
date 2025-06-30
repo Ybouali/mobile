@@ -81,7 +81,7 @@ class _LineChartWidgetWeeklyScreenState
       () => LineChart(
         LineChartData(
           minY: 0,
-          maxY: 40,
+          maxY: 60,
           minX: 0,
           maxX: 7,
           lineBarsData: [
