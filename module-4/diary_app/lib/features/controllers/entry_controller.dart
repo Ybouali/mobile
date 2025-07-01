@@ -45,7 +45,7 @@ class EntryController extends GetxController {
 
   @override
   void onInit() async {
-    await initUserIfIsOnStorage();
+    // await initUserIfIsOnStorage();
     await getAllEntrybyEmail();
     super.onInit();
   }
@@ -57,16 +57,29 @@ class EntryController extends GetxController {
     final String? name = await storage.read(key: "name");
     final String? expiresAt = await storage.read(key: "expiresAt");
 
-    if (email != null && name != null && expiresAt != null) {
-      UserModel oldUser = UserModel(
-        email: email,
-        name: name,
-        expiresAt: DateTime.parse(expiresAt),
-      );
+    if (email != null &&
+        name != null &&
+        expiresAt != null &&
+        email.isNotEmpty &&
+        name.isNotEmpty &&
+        expiresAt.isNotEmpty) {
+      DateTime? exAt;
+      try {
+        exAt = DateTime.parse(expiresAt);
+      } catch (e) {
+        debugPrint('Error parsing expiresAt: $e');
+
+        exAt = DateTime.now().subtract(const Duration(seconds: 1));
+      }
+
+      UserModel oldUser = UserModel(email: email, name: name, expiresAt: exAt);
       user.value = UserModel.empty();
       if (oldUser.checkExp()) {
         user.value = oldUser;
       }
+    } else {
+      user.value = UserModel.empty();
+      return;
     }
   }
 
@@ -109,9 +122,24 @@ class EntryController extends GetxController {
     try {
       if (user.value!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
+        Get.back();
+        Get.snackbar(
+          'Delete Entry',
+          'Entry with title of $userEmail was deleted ! :)',
+          snackPosition: SnackPosition.TOP,
+          // duration: Duration(seconds: 5),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         await getAllEntrybyEmail();
       }
     } catch (e) {
+      Get.back();
+      Get.snackbar(
+        'Delete Entry',
+        'Could not delete the Entry with title of $userEmail !',
+        snackPosition: SnackPosition.TOP,
+      );
       debugPrint(e.toString());
     }
   }
@@ -123,6 +151,15 @@ class EntryController extends GetxController {
       final String content = contentController.text;
 
       if (content.isEmpty || userEmail.isEmpty || title.isEmpty) {
+        Get.back();
+        Get.snackbar(
+          'Required field :)',
+          'Please Make sure ur Enty has a title and a content',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.red.shade300,
+          colorText: Colors.blue.shade800,
+        );
         return;
       }
 
@@ -133,6 +170,15 @@ class EntryController extends GetxController {
         'content': content,
         'feeling': selectedFeelingOnCreated.value.index,
       });
+      Get.back();
+      Get.snackbar(
+        'Create Entry',
+        'Entry with title of $title was created ! :)',
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.greenAccent,
+        colorText: Colors.blue.shade800,
+      );
 
       await getAllEntrybyEmail();
     } catch (e) {

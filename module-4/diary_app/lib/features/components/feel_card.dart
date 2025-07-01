@@ -17,7 +17,9 @@ class FeelCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final EntryController entryController = Get.put(EntryController());
-    final double percent = entryController.getFeelingPercentage(feeling);
+    final double percent = entryController
+        .getFeelingPercentage(feeling)
+        .roundToDouble();
     return Row(
       children: [
         const SizedBox(width: 5),

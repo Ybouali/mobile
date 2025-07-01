@@ -145,7 +145,7 @@ void _showMoreInfoOfFeeling(
                     entryModel.userEmail!,
                     entryModel.id!,
                   );
-                  Get.back();
+                  // Get.back();
                 },
               ),
             ],

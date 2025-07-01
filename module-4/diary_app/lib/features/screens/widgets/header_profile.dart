@@ -65,9 +65,8 @@ class HeaderProfile extends StatelessWidget {
             // Icon to logOut from app
             IconButton(
               onPressed: () async {
-                await AuthService().logoutAuth();
-                if (entryController.user.value != null &&
-                    !entryController.user.value!.checkExp()) {
+                final bool out = await AuthService().logoutAuth();
+                if (out) {
                   Get.offAll(() => OnBordingScreen());
                 }
               },

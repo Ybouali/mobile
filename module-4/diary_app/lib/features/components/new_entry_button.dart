@@ -70,7 +70,7 @@ void _addEntry(BuildContext context, EntryController entryController) {
               ),
               onPressed: () async {
                 await entryController.createEntry();
-                Get.back();
+                // Get.back();
                 entryController.contentController.clear();
                 entryController.titleController.clear();
               },

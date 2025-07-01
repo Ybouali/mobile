@@ -1,5 +1,6 @@
 import 'package:diary_app/features/components/background.dart';
 import 'package:diary_app/features/controllers/entry_controller.dart';
+import 'package:diary_app/features/models/user_model.dart';
 import 'package:diary_app/features/services/auth/auth_service.dart';
 import 'package:diary_app/navigation/bottom_nav_menu.dart';
 import 'package:flutter/material.dart';
@@ -37,7 +38,7 @@ class OnBordingScreen extends StatelessWidget {
                 ),
                 onPressed: () async {
                   await AuthService().login();
-                  if (entryController.user.value != null &&
+                  if (entryController.user.value != UserModel.empty() &&
                       entryController.user.value!.checkExp()) {
                     Get.to(() => BottomNavMenu());
                   }
