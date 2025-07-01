@@ -46,7 +46,7 @@ class EntryController extends GetxController {
 
   @override
   void onInit() async {
-    await initUserIfIsOnStorage();
+    // await initUserIfIsOnStorage();
     await getAllEntrybyEmail();
     super.onInit();
   }
@@ -130,6 +130,15 @@ class EntryController extends GetxController {
     try {
       if (user.value!.email == userEmail) {
         await _firebaseFirestore.collection("notes").doc(entryId).delete();
+        Get.back();
+        Get.snackbar(
+          'Delete Entry',
+          'Entry with title of $userEmail was deleted ! :)',
+          snackPosition: SnackPosition.TOP,
+          // duration: Duration(seconds: 5),
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+        );
         if (timestamp == null) {
           await getAllEntrybyEmail();
         } else {
@@ -137,28 +146,54 @@ class EntryController extends GetxController {
         }
       }
     } catch (e) {
+      Get.back();
+      Get.snackbar(
+        'Delete Entry',
+        'Could not delete the Entry with title of $userEmail !',
+        snackPosition: SnackPosition.TOP,
+      );
       debugPrint(e.toString());
     }
   }
 
   Future<void> createEntry() async {
     try {
-      if (titleController.text.isNotEmpty &&
-          contentController.text.isNotEmpty) {
-        final String userEmail = user.value!.email;
-        final String title = titleController.text;
-        final String content = contentController.text;
+      final String userEmail = user.value!.email;
+      final String title = titleController.text;
+      final String content = contentController.text;
 
-        await _firebaseFirestore.collection("notes").add({
-          'userEmail': userEmail,
-          'created_at': Timestamp.now(),
-          'title': title,
-          'content': content,
-          'feeling': selectedFeelingOnCreated.value.index,
-        });
-
-        await getAllEntrybyEmail();
+      if (content.isEmpty || userEmail.isEmpty || title.isEmpty) {
+        Get.back();
+        Get.snackbar(
+          'Required field :)',
+          'Please Make sure ur Enty has a title and a content',
+          snackPosition: SnackPosition.TOP,
+          duration: Duration(seconds: 5),
+          backgroundColor: Colors.red.shade300,
+          colorText: Colors.blue.shade800,
+        );
+        return;
       }
+
+      await _firebaseFirestore.collection("notes").add({
+        'userEmail': userEmail,
+        'created_at': Timestamp.now(),
+        'title': title,
+        'content': content,
+        'feeling': selectedFeelingOnCreated.value.index,
+      });
+
+      Get.back();
+      Get.snackbar(
+        'Create Entry',
+        'Entry with title of $title was created ! :)',
+        snackPosition: SnackPosition.TOP,
+        duration: Duration(seconds: 5),
+        backgroundColor: Colors.greenAccent,
+        colorText: Colors.blue.shade800,
+      );
+
+      await getAllEntrybyEmail();
     } catch (e) {
       debugPrint(e.toString());
     }

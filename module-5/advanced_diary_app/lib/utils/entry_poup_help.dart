@@ -41,7 +41,7 @@ class EntryPoupHelp {
                 ),
                 onPressed: () async {
                   await entryController.createEntry();
-                  Get.back();
+                  // Get.back();
                   entryController.contentController.clear();
                   entryController.titleController.clear();
                 },
