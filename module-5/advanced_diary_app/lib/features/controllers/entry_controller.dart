@@ -58,7 +58,12 @@ class EntryController extends GetxController {
     final String? name = await storage.read(key: "name");
     final String? expiresAt = await storage.read(key: "expiresAt");
 
-    if (email!.isNotEmpty && name!.isNotEmpty && expiresAt!.isNotEmpty) {
+    if (email != null &&
+        name != null &&
+        expiresAt != null &&
+        email.isNotEmpty &&
+        name.isNotEmpty &&
+        expiresAt.isNotEmpty) {
       UserModel oldUser = UserModel(
         email: email,
         name: name,

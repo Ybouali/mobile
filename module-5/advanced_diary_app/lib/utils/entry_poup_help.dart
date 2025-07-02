@@ -166,7 +166,7 @@ class EntryPoupHelp {
                       entryModel.id!,
                       timestamp,
                     );
-                    Get.back();
+                    // Get.back();
                   },
                 ),
               ],
