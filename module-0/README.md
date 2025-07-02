@@ -8,11 +8,11 @@ This repository contains solutions for the Piscine Mobile Module 00 subject. It 
 
 ## 📂 Project Structure
 
-```mobileModule00/
+mobileModule00/
 ├── ex00/
 ├── ex01/
 ├── ex02/
-└── calculator_app/```
+└── calculator_app/
 
 
 ---
